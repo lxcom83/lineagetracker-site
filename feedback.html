@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Send feedback | Lineage Tracker</title>
+<meta name="description" content="Tell us about a problem, an idea or a question.">
+<meta property="og:title" content="Send feedback | Lineage Tracker">
+<meta property="og:description" content="Tell us about a problem, an idea or a question.">
+<meta property="og:image" content="https://lineagetracker.org/img/og.png">
+<meta name="theme-color" content="#F5F2EC">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="get.html">Get the app</a></nav></div></header>
+<main>
+<div class="wrap narrow" style="padding:40px 22px 30px">
+<h1>Send feedback</h1>
+<p class="lede">Problems, ideas and questions all help.</p>
+<div class="notice" id="notReady" hidden>This form isn't connected yet. Please check back soon.</div>
+<form id="fb" class="fb" action="https://api.web3forms.com/submit" method="POST">
+  <input type="hidden" name="access_key" id="accessKey">
+  <input type="hidden" name="subject" id="subject" value="Lineage Tracker feedback">
+  <input type="hidden" name="from_name" value="Lineage Tracker website">
+  <input type="hidden" name="redirect" value="https://lineagetracker.org/feedback.html?sent=1">
+  <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <label class="fld"><span>What's it about?</span><select name="type" id="type">
+    <option value="bug">Something isn't working</option><option value="idea">An idea or request</option><option value="question">A question</option><option value="android">I'd like to be an Android tester</option><option value="other">Something else</option></select></label>
+  <label class="fld"><span id="msgLabel">What happened?</span><textarea name="message" id="message" rows="5" required></textarea></label>
+  <label class="fld" id="stepsBox"><span>What did you tap just before? (optional)</span><textarea name="steps" rows="3" placeholder="e.g. Opened a packet, tapped Sow a tray, then Save"></textarea></label>
+  <div class="two"><label class="fld"><span>Your email (optional, if you'd like a reply)</span><input type="email" name="email" autocomplete="email"></label><label class="fld"><span>Your name (optional)</span><input name="name" autocomplete="name"></label></div>
+  <div id="appBox" hidden><label class="chk"><input type="checkbox" id="incApp" checked> Include these details from the app</label><pre id="appInfo" class="appinfo"></pre><input type="hidden" name="app_details" id="appDetails"></div>
+  <p class="small muted">Only what's on this form is sent. It goes through Web3Forms, a form service that emails it to us. Please don't include passwords or payment details. Want to send a screenshot, or prefer email? Write to <a href="mailto:feedback@lineagetracker.org">feedback@lineagetracker.org</a> instead.</p>
+  <div class="actions"><button class="btn primary" type="submit" id="sendBtn">Send</button></div>
+</form>
+<div id="thanks" class="notice ok" hidden><b>Thank you!</b> Your feedback has been sent.</div>
+<div id="failed" class="notice warn" hidden>That didn't send. Please check your connection and try again.</div>
+</div>
+</main>
+<footer><div class="wrap"><span>© 2026 Lineage Tracker</span><span><a href="privacy.html">Your data</a> · <a href="testers.html">Help test</a> · <a href="feedback.html">Feedback</a> · <a href="donate.html">Support</a> · <a href="https://github.com/lxcom83/Lineage">GitHub</a></span></div></footer>
+<script>
+(function(){
+  var ACCESS_KEY='bbcc8a10-1991-4bba-b893-9685929800c7';
+  var q=new URLSearchParams(location.search), f=document.getElementById('fb');
+  if(q.get('sent')){f.hidden=true;document.getElementById('thanks').hidden=false;return;}
+  if(/PASTE-YOUR/.test(ACCESS_KEY)){document.getElementById('notReady').hidden=false;document.getElementById('sendBtn').disabled=true;}
+  document.getElementById('accessKey').value=ACCESS_KEY;
+  var type=document.getElementById('type'); if(q.get('type'))type.value=q.get('type');
+  var details=[];['v','device','mode','error'].forEach(function(k){if(q.get(k))details.push({v:'App version',device:'Device',mode:'Mode',error:'Error'}[k]+': '+q.get(k).slice(0,300));});
+  if(details.length){document.getElementById('appBox').hidden=false;document.getElementById('appInfo').textContent=details.join('\n');}
+  if(q.get('error')){document.getElementById('message').value='';}
+  function upd(){var t=type.value;document.getElementById('stepsBox').hidden=t!=='bug';document.getElementById('msgLabel').textContent=t==='bug'?'What happened?':t==='android'?'Which phone do you use? (Android testers need a Google account)':'Tell us more';}
+  type.addEventListener('change',upd);upd();
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    document.getElementById('appDetails').value=document.getElementById('incApp').checked&&details.length?details.join('\n'):'';
+    document.getElementById('subject').value='Lineage Tracker feedback: '+type.options[type.selectedIndex].text;
+    var data=Object.fromEntries(new FormData(f)); delete data.redirect;
+    var btn=document.getElementById('sendBtn'); btn.disabled=true; btn.textContent='Sending';
+    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)})
+      .then(function(r){return r.json();}).then(function(j){if(j.success){f.hidden=true;document.getElementById('thanks').hidden=false;document.getElementById('failed').hidden=true;}else throw 0;})
+      .catch(function(){document.getElementById('failed').hidden=false;btn.disabled=false;btn.textContent='Send';});
+  });
+})();
+</script>
+</body>
+</html>
