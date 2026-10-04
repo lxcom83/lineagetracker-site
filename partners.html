@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make it yours | Lineage Tracker</title>
+<meta name="description" content="Offer your members their own version of Lineage Tracker, with your name, logo and colours. Free.">
+<meta property="og:title" content="Make it yours | Lineage Tracker">
+<meta property="og:description" content="Offer your members their own version of Lineage Tracker, with your name, logo and colours. Free.">
+<meta property="og:image" content="https://lineagetracker.org/img/og.png">
+<meta name="theme-color" content="#F5F2EC">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=17">
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="get.html">Get the app</a></nav><a class="nav-support" href="donate.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 4.2 2.4.6-1.2 2.1-2.4 4.2-2.4 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Support</a></div></header>
+<main>
+<div class="wrap narrow" style="padding:40px 22px 10px">
+<h1>Make it yours</h1>
+<p class="lede">Your club's own app, free.</p>
+<p>Seed libraries, garden clubs, breed societies, schools and nurseries can offer members their own version of Lineage Tracker, with your name, logo, colours and the features that suit you. It takes a few minutes. There's nothing to install or host, and you never need to ask us.</p>
+<ul class="ticks">
+<li><b>Your brand:</b> name, logo, colours and a welcome message.</li>
+<li><b>Your focus:</b> plants, animals or both, and only the features your members need.</li>
+<li><b>Your varieties:</b> optionally, link a list so members start with your catalogue.</li>
+<li><b>Always up to date:</b> your version runs on the official app, so improvements reach your members automatically.</li>
+<li><b>Private:</b> members' records stay on their own devices. You don't see them, and neither do we.</li>
+</ul>
+</div>
+<section><div class="wrap narrow">
+<h2>Build your version</h2>
+<form id="pk" class="fb" novalidate>
+  <div class="two"><label class="fld"><span>App name</span><input name="n" maxlength="40" placeholder="e.g. Hilltop Seed Library" required></label><label class="fld"><span>Your organisation</span><input name="o" maxlength="60" placeholder="e.g. Hilltop Seed Savers"></label></div>
+  <label class="fld"><span>Logo address (optional)</span><input name="l" placeholder="https://yourwebsite.org/logo.png"></label>
+  <p class="small muted" style="margin-top:-8px">A link to a square logo on your own website, starting with https://. Without one, the Lineage Tracker tree is shown.</p>
+  <div class="two"><label class="fld"><span>Main colour (headings)</span><input type="color" name="p" value="#1F3557"></label><label class="fld"><span>Accent colour (buttons)</span><input type="color" name="a" value="#D9915F"></label></div>
+  <label class="fld"><span>Welcome message (optional)</span><textarea name="w" maxlength="300" rows="3" placeholder="e.g. Track the seed you borrow from the library and what you grow from it."></textarea></label>
+  <label class="fld"><span>Your website (optional)</span><input name="u" placeholder="https://yourwebsite.org"></label>
+  <div class="two"><label class="fld"><span>For</span><select name="k"><option value="plants">Plants</option><option value="animals">Animals</option><option value="both">Plants and animals</option><option value="">Let each person choose</option></select></label>
+  <label class="fld"><span>Most detailed mode allowed</span><select name="m"><option value="">Any (Garden, Seed saver or Breeder)</option><option value="garden">Garden only</option><option value="saver">Up to Seed saver</option></select></label></div>
+  <details class="feat"><summary><span class="ft"><b>Hide features</b><small>Untick nothing to keep everything available</small></span></summary><div class="feat-body"><div class="hide-grid"><label class="chk"><input type="checkbox" name="h" value="offers"> Selling and swapping</label><label class="chk"><input type="checkbox" name="h" value="projects"> Breeding projects and goals</label><label class="chk"><input type="checkbox" name="h" value="crosses"> Crosses and pairings</label><label class="chk"><input type="checkbox" name="h" value="planner"> Cross planner</label><label class="chk"><input type="checkbox" name="h" value="coi"> Inbreeding checks</label><label class="chk"><input type="checkbox" name="h" value="workspaces"> Workspaces and shared libraries</label><label class="chk"><input type="checkbox" name="h" value="import"> Importing records</label><label class="chk"><input type="checkbox" name="h" value="ask"> Ask about your records (AI)</label><label class="chk"><input type="checkbox" name="h" value="labels"> Printable labels</label><label class="chk"><input type="checkbox" name="h" value="weather"> Weather</label><label class="chk"><input type="checkbox" name="h" value="trays"> Seed trays</label><label class="chk"><input type="checkbox" name="h" value="outputs"> Harvests and products</label><label class="chk"><input type="checkbox" name="h" value="inputs"> Inputs and treatments</label><label class="chk"><input type="checkbox" name="h" value="shopcheck"> Check before buying</label><label class="chk"><input type="checkbox" name="h" value="plan"> Season plan</label><label class="chk"><input type="checkbox" name="h" value="guidance"> Seed-saving guidance</label><label class="chk"><input type="checkbox" name="h" value="germ"> Germination tests</label><label class="chk"><input type="checkbox" name="h" value="propagate"> Cuttings and clones</label></div></div></details>
+  <details class="feat" open><summary><span class="ft"><b>Your seed library (optional)</b><small>Members start with your varieties</small></span></summary><div class="feat-body">
+    <p class="small" style="margin-top:12px">Upload your list and it's packed into your link, so there's nothing to host. Use either:</p>
+    <ul class="small"><li><b>A spreadsheet</b> saved as CSV, with columns such as <i>Name</i>, <i>Species</i>, <i>Group</i>, <i>Description</i>, <i>Source</i> and <i>F1</i>.</li><li><b>A file exported from Lineage Tracker:</b> build your library in the app, then My garden › Export varieties.</li></ul>
+    <label class="fld"><span>Variety list file</span><input type="file" id="libFile" accept=".csv,.json,text/csv,application/json"></label>
+    <p class="small" id="libInfo"></p>
+    <details class="more-adv"><summary class="small">Very large list? Host it yourself instead</summary><label class="fld" style="margin-top:8px"><span>Variety list address</span><input name="c" placeholder="https://yourwebsite.org/varieties.json"></label><p class="small muted">A file in Lineage Tracker's friendly format on your website. <a href="https://github.com/lxcom83/LineageTracker/blob/main/docs/DATA-FORMAT.md">Format guide</a></p></details>
+  </div></details>
+  <h3>Preview</h3>
+  <div class="pv" id="pv"><div class="pv-top"><span class="pv-mark" id="pvMark"></span><span><b id="pvName">Your app name</b><small>Powered by Lineage Tracker</small></span></div><div class="pv-body"><p id="pvWelcome" class="small"></p><div class="pv-btn" id="pvBtn">Scan a packet or label</div><div class="pv-tile">Check before buying</div></div></div>
+  <h3>The terms</h3>
+  <ol class="terms">
+<li><b>Use the kit.</b> Your version runs from the official Lineage Tracker app. You may not copy, host or modify the code.</li>
+<li><b>Keep the credit.</b> Your version shows "Powered by Lineage Tracker", and things people share from it say so.</li>
+<li><b>Keep the support links.</b> Donation and support links go to Lineage Tracker. You can still ask members to support your own organisation separately.</li>
+<li><b>Don't charge for it.</b> You may not charge your members or customers for access to your version.</li>
+<li><b>Use your own name and logo,</b> and only variety lists you have the right to share. Don't suggest you are Lineage Tracker.</li>
+<li><b>Respect privacy.</b> Members' records stay on their own devices. Don't ask them to send you their records unless they choose to.</li>
+<li><b>You're responsible for what you add:</b> your welcome message, your variety list and any claims about your products.</li>
+<li><b>Withdrawal.</b> Lineage Tracker may withdraw a version that breaks these terms or is misleading or offensive. Members keep their records and continue with plain Lineage Tracker.</li>
+</ol>
+  <label class="chk"><input type="checkbox" id="agree"> I agree to the relabelling terms on behalf of my organisation</label>
+  <div class="actions"><button class="btn primary" type="submit">Create my link</button></div>
+</form>
+<div class="notice" style="margin-top:18px"><b>Need more?</b> Your own web address, custom features, or your own branding without the Lineage Tracker credit are available under a paid licence. Email <a href="mailto:feedback@lineagetracker.org">feedback@lineagetracker.org</a>.</div>
+<div id="out" hidden>
+  <h3>Your link</h3>
+  <p>Share this with your members, on your website, in newsletters or on flyers.</p>
+  <div class="linkbox"><input id="link" readonly></div>
+  <div class="actions"><button class="btn primary" id="copy" type="button">Copy link</button><a class="btn" id="open" target="_blank" rel="noopener">Open it</a><button class="btn" id="dlqr" type="button">Download QR code</button></div>
+  <div id="qr" class="qrbox"></div>
+  <p class="small muted">Your version's ID: <b id="pid"></b>. Mention it if you contact us. To change anything, come back and make a new link; members who open the new link get the update.</p>
+</div>
+<div id="err" class="notice warn" hidden></div>
+</div></section>
+</main>
+<footer><div class="wrap"><span>© 2026 Lineage Tracker</span><span><a href="privacy.html">Your data</a> · <a href="testers.html">Help test</a> · <a href="feedback.html">Feedback</a> · <a href="partners.html">Make it yours</a> · <a href="donate.html">Support</a> · <a href="https://github.com/lxcom83/LineageTracker">GitHub</a></span></div></footer>
+<script src="qr.js?v=17"></script>
+<script src="partners.js?v=17"></script>
+</body>
+</html>
