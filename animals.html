@@ -14,9 +14,18 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=17">
+<link rel="stylesheet" href="style.css?v=19">
+<!-- Google tag (gtag.js): counts visits to the website only. The app itself sends nothing. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T2646RWNH5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T2646RWNH5', { allow_google_signals: false, allow_ad_personalization_signals: false });
+</script>
 </head>
 <body>
+<div class="test-bar" role="note"><span><b>Lineage Tracker is in testing.</b> Found a bug or have an idea? Your reports shape it.</span><span class="test-links"><a href="feedback.html?type=bug">Report a bug</a><a href="testers.html">Help test</a></span></div>
 <header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html" aria-current="page">Animals</a><a href="get.html">Get the app</a></nav><a class="nav-support" href="donate.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 4.2 2.4.6-1.2 2.1-2.4 4.2-2.4 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Support</a></div></header>
 <main>
 <div class="wrap" style="padding:40px 22px 6px"><h1>For animals</h1><p class="lede">Pedigrees, pairings, hatch dates and health records.</p><p>For poultry, goats, rabbits and other small-scale breeding: every animal, its family line, its care and its offspring. Tap any feature to see how it works and where to find it.</p><div class="actions"><a class="btn primary" href="https://app.lineagetracker.org/">Open the app</a><a class="btn" href="https://app.lineagetracker.org/#/try/animals">Try the chicken example</a><button class="btn" type="button" id="toggleAll">Open all</button></div><p class="hint-small">The example opens separately from your own records, so explore freely.</p><p class="modes-key"><b>Modes:</b> <span class="mode m-all">All modes</span> <span class="mode m-saver">Seed saver and Breeder</span> <span class="mode m-breeder">Breeder</span> <span class="mode m-optin">Turn on in Settings</span><br><small>Change mode any time in Settings, Mode. Any feature can also be switched on by itself.</small></p></div>

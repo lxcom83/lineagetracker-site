@@ -159,3 +159,9 @@ header.top nav{margin-left:auto}
 .qrbox{width:200px;max-width:60%;margin:8px 0}.qrbox svg{width:100%;height:auto;display:block}
 
 .more-adv{margin-top:6px}.more-adv summary{cursor:pointer;color:var(--muted)}
+
+/* Testing notice at the top of every page */
+.test-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 16px;background:#1F3557;color:#F5F2EC;padding:9px 16px;font-size:.92rem;line-height:1.35;text-align:center}
+.test-bar b{color:#fff}
+.test-links{display:inline-flex;gap:14px}
+.test-bar a{color:#F2C49B;font-weight:700;text-decoration:underline;text-underline-offset:3px}
