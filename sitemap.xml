@@ -10,4 +10,5 @@
   <url><loc>https://lineagetracker.org/feedback.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://lineagetracker.org/donate.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://lineagetracker.org/privacy.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lineagetracker.org/signup.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
 </urlset>
