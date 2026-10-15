@@ -183,3 +183,6 @@ header.top nav{margin-left:auto}
 .pill.dev{background:#DDEBD3;color:#2F5A1E}
 .pill.soon{background:#DCE8F4;color:#1F4A7A}
 @media (prefers-color-scheme:dark){.pill.dev{background:#243A1E;color:#A8D58F}.pill.soon{background:#1E3048;color:#9CC3EA}}
+
+.stay-note{background:var(--sunk);border-left:5px solid #3F6E4E;border-radius:12px;padding:12px 16px;max-width:60ch;font-size:.98rem}
+nav a.nav-stay{font-weight:700;text-decoration:underline;text-underline-offset:4px}
