@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Swap board (demo) | Lineage Tracker</title>
+<meta name="description" content="Demo swap board. All listings are made up.">
+
+
+
+<meta name="theme-color" content="#F5F2EC">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="style.css?v=24"><link rel="stylesheet" href="demo/demo.css">
+<!-- Google tag (gtag.js): counts visits to the website only. The app itself sends nothing. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T2646RWNH5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T2646RWNH5', { allow_google_signals: false, allow_ad_personalization_signals: false });
+</script>
+</head>
+<body>
+<div class="test-bar" role="note"><span><b>Lineage Tracker is in testing.</b> Found a bug or have an idea? Your reports shape it.</span><span class="test-links"><a href="feedback.html?type=bug">Report a bug</a><a href="testers.html">Help test</a></span></div>
+<header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="globe.html" aria-current="page">Community (demo)</a><a href="globe.html">Community (demo)</a><a href="whatsnext.html">What's next</a><a href="get.html">Get the app</a><a class="nav-stay" href="signup.html">Stay in touch</a></nav><a class="nav-support" href="donate.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 4.2 2.4.6-1.2 2.1-2.4 4.2-2.4 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Support</a></div></header>
+<main><div class="demo-banners" role="note"><b>DEMO DATA</b> Every member, listing and number on this page is made up. <b>UNDER CONSTRUCTION</b> Nothing here is live yet.</div><div class="demo-wrap"><div class="mission" role="note"><b>We support existing communities around the globe.</b></div><div id="demobar" class="demobar"></div><nav class="subnav" aria-label="Community pages"><a href="globe.html">Find near me</a><a href="swap.html" aria-current="page">Swap board</a><a href="members.html">Members</a><a href="inbox.html">My introductions</a></nav><h1>Swap board <span class="tag-demo">DEMO</span></h1><div class="optin"><b>You choose what shows.</b> New members are private by default. Switch any of these on, and off again whenever you like:<ul><li>Show my region on the globe.</li><li>Be listed in the member list.</li><li>Offer seed, plants or animals on the swap board. Posting a listing shows that listing and your card.</li></ul>Your name and contact details are never public. One person sees them, only after you both agree to talk.</div><p>Seed, seedlings, hatching eggs and stock that growers and breeders are happy to share. Every listing here is invented. Members show by random ID, karma level, swap count and member-since date.</p>
+<div class="searchrow"><input id="q" type="search" autocomplete="off" placeholder="Search, for example butternut, Cucurbita maxima or Black Australorp" aria-label="Search the swap board"><div class="qres" id="qres"></div></div><p class="qnote" id="qnote"></p>
+<p class="orline">Or choose exactly</p>
+<div class="dcontrols"><label>Country<select id="fco"></select></label><label>State<select id="fst"><option value="">All states</option></select></label><label>Region<select id="fr"><option value="">All regions</option></select></label>
+<label>Can reach me in<select id="fre"><option value="">Anywhere</option></select></label></div>
+<div class="dcontrols"><label>Plants or animals<select id="fg"><option value="">Both</option><option value="plants">Plants</option><option value="animals">Animals</option></select></label><label>Crop or animal<select id="fc"><option value="">Any</option></select></label><label>Type<select id="ft"><option value="">Any</option></select></label><label>Variety or breed<select id="fv"><option value="">Any</option></select></label><label>Sort by<select id="so"><option value="karma">Karma level</option><option value="swaps">Most swaps</option><option value="since">Longest member</option></select></label><button class="dbtn" id="clr" type="button">Clear all filters</button></div>
+<p id="count" class="hint-small"></p><div class="cards" id="cards"></div>
+<div class="note-box"><b>Before you swap.</b> Some states and countries have rules about moving seed, plants and animals, for example into Tasmania or Western Australia. "Can reach me in" shows only listings whose owner says they will send to your state. Please check your state&#39;s biosecurity page too. Lineage Tracker doesn&#39;t handle payment, postage or the swap itself. To ask about a listing, sign in (it&#39;s free) and request an introduction.</div></div></main>
+<footer><div class="wrap"><span>© 2026 Lineage Tracker</span><span><a href="privacy.html">Your data</a> · <a href="whatsnext.html">What's next</a> · <a href="testers.html">Help test</a> · <a href="feedback.html">Feedback</a> · <a href="signup.html">Stay in touch</a> · <a href="partners.html">Make it yours</a> · <a href="donate.html">Support</a> · <a href="https://github.com/lxcom83/LineageTracker">GitHub</a></span></div></footer>
+<script>
+(function(){var b=document.getElementById('toggleAll');if(!b)return;b.addEventListener('click',function(){var ds=document.querySelectorAll('details.feat');var open=b.textContent==='Open all';ds.forEach(function(d){d.open=open;});b.textContent=open?'Close all':'Open all';});
+if(location.hash){var t=document.getElementById(location.hash.slice(1));if(t&&t.tagName==='DETAILS')t.open=true;}})();
+</script>
+<script src="demo/data.js"></script><script src="demo/session.js"></script><script src="demo/lists.js"></script><script src="demo/intro.js"></script></body>
+</html>
