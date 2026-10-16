@@ -3,6 +3,14 @@
   var A = window.AC, LT = A.LT, el = A.el, $ = function (id) { return document.getElementById(id); };
   if (!$('ac_main')) return;
   function say(node, text, ok) { node.textContent = text; node.className = ok ? 'okmsg' : 'err'; }
+  // Supabase sends the QR code as raw SVG text after 'data:image/svg+xml;utf-8,'. Unencoded, a '#' in it ends the address and the
+  // picture breaks, so re-encode it (base64 or already-encoded addresses pass through unchanged).
+  function qrSrc(q) {
+    var m = /^data:image\/svg\+xml(;[^,]*)?,([\s\S]*)$/.exec(String(q));
+    if (!m || /;base64/i.test(m[1] || '')) return q;
+    var svg = m[2]; if (!/^\s*</.test(svg)) { try { svg = decodeURIComponent(svg); } catch (e) { return q; } }
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
   A.requireSignIn('account.html').then(function (w) {
     if (!w) return;
     if (w.state === 'error') { $('ac_load').textContent = A.say('network') + ' Reload the page to try again.'; return; }
@@ -56,7 +64,7 @@
       var setup = $('ac_mfa_setup'), msg = $('ac_mfa_err'); msg.textContent = ''; setup.hidden = false;
       A.enrolStart().then(function (r) {
         if (!r.ok) { say(msg, 'We could not start the setup. Please try again in a moment.'); return; }
-        var qr = r.body.totp && r.body.totp.qr_code; var img = $('ac_mfa_qr'); img.hidden = !qr; if (qr) img.src = qr;
+        var qr = r.body.totp && r.body.totp.qr_code; var img = $('ac_mfa_qr'); img.hidden = !qr; if (qr) img.src = qrSrc(qr);
         $('ac_mfa_secret').textContent = (r.body.totp && r.body.totp.secret) || '';
         $('ac_mfa_form').onsubmit = function (e) {
           e.preventDefault(); msg.textContent = ''; var b = $('ac_mfa_btn'); b.disabled = true;
