@@ -64,7 +64,11 @@
       var setup = $('ac_mfa_setup'), msg = $('ac_mfa_err'); msg.textContent = ''; setup.hidden = false;
       A.enrolStart().then(function (r) {
         if (!r.ok) { say(msg, 'We could not start the setup. Please try again in a moment.'); return; }
-        var qr = r.body.totp && r.body.totp.qr_code; var img = $('ac_mfa_qr'); img.hidden = !qr; if (qr) img.src = qrSrc(qr);
+        var t = r.body.totp || {}, img = $('ac_mfa_qr'), src = '';
+        // Draw the QR ourselves from the otpauth link (qr.js, the same encoder the partners page uses); Supabase's own picture is the fallback.
+        if (t.uri && typeof QR !== 'undefined') { try { src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(QR.svg(t.uri, { dark: '#000' })); } catch (e) { src = ''; } }
+        if (!src && t.qr_code) src = qrSrc(t.qr_code);
+        img.hidden = !src; if (src) img.src = src;
         $('ac_mfa_secret').textContent = (r.body.totp && r.body.totp.secret) || '';
         $('ac_mfa_form').onsubmit = function (e) {
           e.preventDefault(); msg.textContent = ''; var b = $('ac_mfa_btn'); b.disabled = true;
