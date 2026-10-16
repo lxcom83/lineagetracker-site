@@ -186,3 +186,25 @@ header.top nav{margin-left:auto}
 
 .stay-note{background:var(--sunk);border-left:5px solid #3F6E4E;border-radius:12px;padding:12px 16px;max-width:60ch;font-size:.98rem}
 nav a.nav-stay{font-weight:700;text-decoration:underline;text-underline-offset:4px}
+
+/* tidy 2026-10-16: banner, menu button, four-column footer, tools and get-involved sections */
+.top-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 18px;background:#1F3557;color:#F5F2EC;padding:8px 16px;font-size:.92rem;line-height:1.4;text-align:center}
+.top-banner b{color:#fff}
+.top-banner a{color:#F2C49B;font-weight:700;text-underline-offset:3px}
+.tb-support{display:inline-flex;align-items:center;gap:5px;margin-left:6px;background:#E8A06B;color:#1F3557!important;text-decoration:none;border-radius:999px;padding:3px 12px 3px 9px;white-space:nowrap}
+.tb-support svg{width:14px;height:14px;fill:currentColor}
+.tb-support[aria-current="page"]{outline:2px solid #F5F2EC;outline-offset:2px}
+.tb-test{opacity:.9;white-space:nowrap}
+.nav-open{flex:none;text-decoration:none;font-weight:700;font-size:.95rem;color:#fff;background:#1F3557;border-radius:999px;padding:8px 16px;white-space:nowrap}
+.nav-open:hover{filter:brightness(1.15)}
+footer .wrap{display:block}
+.fcols{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 28px}
+.fcol h2{font-size:1rem;margin:0 0 8px;color:var(--ink,#1F3557)}
+.fcol ul{list-style:none;margin:0;padding:0}
+.fcol li{margin:0 0 6px}
+.fline{margin:22px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.involved .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tools-sec .small{margin-top:14px}
+@media (max-width:860px){.fcols{grid-template-columns:repeat(2,1fr)}.involved .grid{grid-template-columns:1fr}}
+@media (max-width:700px){.top-banner{font-size:.85rem;padding:7px 12px}.tb-test{display:none}.nav-open{order:2;margin-left:auto;padding:6px 12px}}
+@media (max-width:420px){.fcols{grid-template-columns:1fr}}
