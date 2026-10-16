@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Staff | Lineage Tracker</title>
+<meta name="description" content="Staff area.">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://zlekqqzvkstdcrrupzfs.supabase.co; connect-src 'self' https://zlekqqzvkstdcrrupzfs.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; form-action 'self'; base-uri 'self'; object-src 'none'"><meta name="theme-color" content="#F5F2EC">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=24"><link rel="stylesheet" href="waitlist.css?v=1"><link rel="stylesheet" href="accounts.css?v=1">
+</head>
+<body>
+<div class="test-bar" role="note"><span><b>Lineage Tracker is in testing.</b> Found a bug or have an idea? Your reports shape it.</span><span class="test-links"><a href="feedback.html?type=bug">Report a bug</a><a href="testers.html">Help test</a></span></div>
+<header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="globe.html">Community (demo)</a><a href="whatsnext.html">What's next</a><a href="get.html">Get the app</a><a class="nav-stay" href="signup.html">Stay in touch</a></nav><a class="nav-support" href="donate.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 4.2 2.4.6-1.2 2.1-2.4 4.2-2.4 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Support</a></div></header>
+<main><div class="su wide"><h1>Staff</h1>
+<p id="st_load" class="muted">Loading…</p>
+<div id="st_block" class="notice warn" hidden><b>Cannot open the staff page.</b> <span id="st_block_msg"></span> <a href="account.html">Your account</a></div>
+<div id="st_main" hidden>
+<p class="small muted">Signed in as <b id="st_who"></b>. Every action here is written to the audit log. <button class="btn" id="st_out" type="button">Sign out</button></p>
+<div class="tabs" role="tablist"><button type="button" role="tab" id="st_t_overview" aria-selected="true">Overview</button><button type="button" role="tab" id="st_t_members" aria-selected="false">Members</button><button type="button" role="tab" id="st_t_blog" aria-selected="false">Blog</button><button type="button" role="tab" id="st_t_invites" aria-selected="false">Invitations</button><button type="button" role="tab" id="st_t_audit" aria-selected="false">Audit log</button><button type="button" role="tab" id="st_t_settings" aria-selected="false">Switches</button><button type="button" role="tab" id="st_t_health" aria-selected="false">Setup check</button></div>
+<section id="st_p_overview"><div class="stats" id="st_stats"></div></section>
+<section id="st_p_members" hidden><form id="st_search" class="inline"><label class="fld"><span>Search (alias text, or a full email address)</span><input id="st_q" type="search" maxlength="100"></label><label class="fld"><span>Status</span><select id="st_status"><option value="">Any</option><option value="active">Active</option><option value="pending">Waiting to confirm</option><option value="suspended">Suspended</option></select></label><button class="btn primary" type="submit">Search</button></form>
+<div id="st_mlist"></div><p id="st_mpager" class="small"></p><div id="st_detail" class="notice" hidden></div></section>
+<section id="st_p_blog" hidden><h2>Waiting for review</h2><p class="small muted">Read the whole post, look at every photo, and check the machine check above it. Approve only what you would be happy to see on the site. Members can switch writing on or off under Switches (blog_write), and reading (blog_public).</p>
+<div id="st_bqueue"></div><div id="st_bpost" class="notice" hidden></div>
+<h2>Published (<span id="st_blive_n">0</span>)</h2><div id="st_blive"></div>
+<div id="st_bkinds" hidden><h2>Kinds of post</h2><p class="small muted">Untick a kind to stop offering it. Posts that already use it keep it.</p><div id="st_bkind_list"></div>
+<form id="st_bkind_add" class="inline"><label class="fld"><span>Add a kind</span><input id="st_bkind_label" maxlength="40"></label><button class="btn" type="submit">Add</button></form></div></section>
+<section id="st_p_invites" hidden><p>Invite people from the Stay in touch list to create an account. Each person is invited only once, and the email says why they are getting it. Sign-up must be open (see Switches). This is never sent automatically.</p>
+<label class="fld"><span>Who</span><select id="st_inv_aud"><option value="community">People who ticked the community pages or the globe</option></select></label>
+<p><button class="btn" id="st_inv_check" type="button">How many could be invited?</button></p>
+<form id="st_inv_form" class="inline"><label class="fld"><span>Send to up to (1 to 50)</span><input id="st_inv_n" type="number" min="1" max="50" value="10"></label><button class="btn primary" id="st_inv_send" type="submit">Send invitations</button></form><p id="st_inv_out" role="status"></p></section>
+<section id="st_p_audit" hidden><label class="fld"><span>Show only</span><select id="st_afilter"><option value="">Everything</option></select></label><div id="st_alist"></div><p id="st_apager" class="small"></p></section>
+<section id="st_p_settings" hidden><p>Switches change what the site does. Administrators can change them. The two-step requirement for staff can only be changed in the database.</p><div id="st_flags"></div></section>
+<section id="st_p_health" hidden><p>Things that must be true for the accounts to be safe. Anything marked FIX needs doing now.</p><div id="st_health"></div></section>
+</div>
+<noscript><p class="notice warn">This page needs JavaScript.</p></noscript></div></main>
+<footer><div class="wrap"><span>© 2026 Lineage Tracker</span><span><a href="privacy.html">Your data</a> · <a href="terms.html">Terms</a> · <a href="whatsnext.html">What's next</a> · <a href="testers.html">Help test</a> · <a href="feedback.html">Feedback</a> · <a href="signup.html">Stay in touch</a> · <a href="partners.html">Make it yours</a> · <a href="donate.html">Support</a> · <a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">How-to videos</a> · <a href="https://github.com/lxcom83/LineageTracker">GitHub</a></span></div></footer>
+
+<script src="waitlist.js?v=1"></script><script src="acct.js?v=1"></script><script src="blocks.js?v=1"></script><script src="staff.js?v=1"></script></body>
+</html>

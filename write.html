@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Write for the blog | Lineage Tracker</title>
+<meta name="description" content="Write a blog post.">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://zlekqqzvkstdcrrupzfs.supabase.co; connect-src 'self' https://zlekqqzvkstdcrrupzfs.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; form-action 'self'; base-uri 'self'; object-src 'none'"><meta name="theme-color" content="#F5F2EC">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=24"><link rel="stylesheet" href="waitlist.css?v=1"><link rel="stylesheet" href="accounts.css?v=1">
+</head>
+<body>
+<div class="test-bar" role="note"><span><b>Lineage Tracker is in testing.</b> Found a bug or have an idea? Your reports shape it.</span><span class="test-links"><a href="feedback.html?type=bug">Report a bug</a><a href="testers.html">Help test</a></span></div>
+<header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="globe.html">Community (demo)</a><a href="whatsnext.html">What's next</a><a href="get.html">Get the app</a><a class="nav-stay" href="signup.html">Stay in touch</a></nav><a class="nav-support" href="donate.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 4.2 2.4.6-1.2 2.1-2.4 4.2-2.4 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Support</a></div></header>
+<main><div class="su wide"><h1>Write for the blog</h1>
+<p id="wr_list_msg" class="err" role="alert"></p>
+<div id="wr_main" hidden>
+<div id="wr_list">
+<div id="wr_closed" class="notice warn" hidden><b>Writing is not open yet.</b> You can still open and delete anything you have here.</div>
+<p>Share what you are growing, breeding or learning. Every post is read by our staff before it appears on the <a href="blog.html">blog</a>. Your alias is shown unless you choose to show another name.</p>
+<p><button class="btn primary" id="wr_new" type="button">New post</button></p>
+<h2>Your posts</h2><div id="wr_posts"></div>
+</div>
+<div id="wr_edit" hidden>
+<p><button class="btn" id="wr_back" type="button">&larr; Your posts</button> <span id="wr_status" class="small muted"></span></p>
+<label class="fld"><span>Title</span><input id="wr_title" maxlength="120" placeholder="For example: First fruit on the Arrakis Black cross"></label>
+<p class="small muted">Build the post from blocks: text, headings, photos, lists, quotes and YouTube links. Drag a block by its handle, or use the arrows, to move it.</p>
+<div id="wr_editor"></div>
+<div class="wr-set"><fieldset><legend>Kind of post (choose 1 to 3)</legend><div id="wr_kinds"></div></fieldset>
+<details><summary>Plants or animals it is about (optional)</summary><div id="wr_topics"></div></details>
+<fieldset><legend>Show my name as</legend>
+<label class="chk"><input type="radio" name="wr_by" id="wr_by_alias" value="alias"><span>My alias, <b id="wr_by_alias_name"></b> (recommended)</span></label>
+<label class="chk"><input type="radio" name="wr_by" id="wr_by_name" value="name"><span>A name for this post</span></label>
+<div id="wr_name_box" hidden><label class="fld"><span>Name to show</span><input id="wr_name" maxlength="60"></label><p class="small muted">Only your own name. Our staff check it is not someone else&rsquo;s. Club and group names will come later.</p></div>
+</fieldset></div>
+<p id="wr_msg" class="err" role="alert"></p><p id="wr_state" class="small muted" role="status"></p>
+<div class="actions"><button class="btn" id="wr_save" type="button">Save draft</button><button class="btn" id="wr_preview_btn" type="button">Preview</button><button class="btn primary" id="wr_submit" type="button">Send for review</button></div>
+<div class="actions"><button class="btn danger" id="wr_withdraw" type="button" hidden>Take it off the blog</button><button class="btn danger" id="wr_delete" type="button">Delete this post</button></div>
+</div>
+<div id="wr_preview" class="modal" hidden role="dialog" aria-modal="true" aria-label="Preview"><div class="modal-in"><p><button class="btn" id="wr_preview_close" type="button">Close the preview</button></p><article id="wr_preview_body" class="blog-post"></article></div></div>
+<div id="wr_agree" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="wr_agree_h"><div class="modal-in"><h2 id="wr_agree_h">Before you send your first post</h2>
+<ul><li>The post is your own work, and you own every photo in it or have permission to use it.</li><li>No one&rsquo;s personal details (phone numbers, addresses or email addresses), nothing for sale and no advertising.</li><li>Our staff read every post before it is published, and may use an AI service to help them review it. A person always decides.</li><li>Once published, anyone can read it. You can take it down at any time, and we can remove it.</li><li>You keep the rights to your post, and allow Lineage Tracker to show it on the website and in links to it.</li><li>The <a href="terms.html" target="_blank" rel="noopener">terms of use</a> apply.</li></ul>
+<label class="chk"><input type="checkbox" id="wr_agree_ok"><span>I agree (posting agreement <span id="wr_agree_v"></span>).</span></label>
+<p id="wr_agree_err" class="err" role="alert"></p>
+<div class="actions"><button class="btn primary" id="wr_agree_send" type="button">Agree and send</button><button class="btn" id="wr_agree_cancel" type="button">Not now</button></div></div></div>
+</div>
+<noscript><p class="notice warn">This page needs JavaScript.</p></noscript></div></main>
+<footer><div class="wrap"><span>© 2026 Lineage Tracker</span><span><a href="privacy.html">Your data</a> · <a href="terms.html">Terms</a> · <a href="whatsnext.html">What's next</a> · <a href="testers.html">Help test</a> · <a href="feedback.html">Feedback</a> · <a href="signup.html">Stay in touch</a> · <a href="partners.html">Make it yours</a> · <a href="donate.html">Support</a> · <a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">How-to videos</a> · <a href="https://github.com/lxcom83/LineageTracker">GitHub</a></span></div></footer>
+
+<script src="waitlist.js?v=1"></script><script src="acct.js?v=1"></script><script src="blocks.js?v=1"></script><script src="write.js?v=1"></script></body>
+</html>

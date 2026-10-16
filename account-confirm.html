@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confirm your account | Lineage Tracker</title>
+<meta name="description" content="Confirm your Lineage Tracker account.">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://zlekqqzvkstdcrrupzfs.supabase.co; connect-src 'self' https://zlekqqzvkstdcrrupzfs.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; form-action 'self'; base-uri 'self'; object-src 'none'"><meta name="theme-color" content="#F5F2EC">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=24"><link rel="stylesheet" href="waitlist.css?v=1"><link rel="stylesheet" href="accounts.css?v=1">
+</head>
+<body>
+<div class="test-bar" role="note"><span><b>Lineage Tracker is in testing.</b> Found a bug or have an idea? Your reports shape it.</span><span class="test-links"><a href="feedback.html?type=bug">Report a bug</a><a href="testers.html">Help test</a></span></div>
+<header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="globe.html">Community (demo)</a><a href="whatsnext.html">What's next</a><a href="get.html">Get the app</a><a class="nav-stay" href="signup.html">Stay in touch</a></nav><a class="nav-support" href="donate.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 4.2 2.4.6-1.2 2.1-2.4 4.2-2.4 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Support</a></div></header>
+<main><div class="su"><h1>Confirm your account</h1>
+<div id="cf_ask" hidden><p>Choose a password to finish creating your Lineage Tracker account. Do this only if you asked for an account with this email address. If you did not, close this page: nothing will happen, and nobody can use the account without this link.</p>
+<form id="cf_form" novalidate><label class="fld"><span>Choose a password</span><input id="cf_p" type="password" autocomplete="new-password" maxlength="100"></label><label class="fld"><span>Type it again</span><input id="cf_p2" type="password" autocomplete="new-password" maxlength="100"></label>
+<p><button class="btn" id="cf_show" type="button" aria-pressed="false">Show password</button></p><p class="small muted">At least 10 characters. A few unrelated words with spaces or dashes between them is easy to remember and hard to guess, for example <i>compost heap sunrise 77</i>. We check it against lists of passwords that have leaked, without sending the password itself.</p>
+<div class="box"><b>The short version of the terms.</b> You must be 18 or over. One account per person. Be decent, and keep to the law about moving seeds, plants and animals. We can remove content or accounts that cause harm. Read the <a href="terms.html" target="_blank" rel="noopener">full terms</a> (version <span id="cf_terms_v"></span>) and the <a href="privacy.html" target="_blank" rel="noopener">privacy policy</a>.</div>
+<label class="chk"><input id="cf_18" type="checkbox"><span>I am 18 or over.</span></label>
+<label class="chk"><input id="cf_agree" type="checkbox"><span>I agree to the terms and the privacy policy.</span></label>
+<p id="cf_msg" class="err" role="alert"></p><button class="btn primary" id="cf_btn" type="submit">Confirm my account</button></form></div>
+<div id="cf_ok" hidden><h2>Your account is ready</h2><p>Thank you. You can sign in now.</p><p><a class="btn primary" href="signin.html">Sign in</a></p></div>
+<div id="cf_resend" hidden><p id="cf_bad_msg" class="notice warn"></p><h2>Get a new link</h2><p>Enter the email address you used. If it belongs to an account that is waiting to be confirmed, we will send a new link. We say the same thing either way, so this page cannot be used to find out who has an account.</p>
+<form id="cf_resend_form" novalidate><label class="fld"><span>Email</span><input id="cf_e" type="email" autocomplete="email" maxlength="254"></label><div id="ts"></div><p id="cf_err" class="err" role="alert"></p><button class="btn primary" id="cf_resend_btn" type="submit">Send a new link</button></form>
+<div id="cf_resend_done" hidden><h2>Check your email</h2><p>If that address has an account waiting to be confirmed, we have sent a new link. It works for 48 hours.</p></div></div>
+<noscript><p class="notice warn">This page needs JavaScript.</p></noscript></div></main>
+<footer><div class="wrap"><span>© 2026 Lineage Tracker</span><span><a href="privacy.html">Your data</a> · <a href="terms.html">Terms</a> · <a href="whatsnext.html">What's next</a> · <a href="testers.html">Help test</a> · <a href="feedback.html">Feedback</a> · <a href="signup.html">Stay in touch</a> · <a href="partners.html">Make it yours</a> · <a href="donate.html">Support</a> · <a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">How-to videos</a> · <a href="https://github.com/lxcom83/LineageTracker">GitHub</a></span></div></footer>
+
+<script src="waitlist.js?v=1"></script><script src="acct.js?v=1"></script><script src="account-confirm.js?v=1"></script></body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create an account | Lineage Tracker</title>
+<meta name="description" content="Create a free Lineage Tracker website account. The app itself never needs one.">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://zlekqqzvkstdcrrupzfs.supabase.co; connect-src 'self' https://zlekqqzvkstdcrrupzfs.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; form-action 'self'; base-uri 'self'; object-src 'none'"><meta name="theme-color" content="#F5F2EC">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=24"><link rel="stylesheet" href="waitlist.css?v=1"><link rel="stylesheet" href="accounts.css?v=1">
+</head>
+<body>
+<div class="test-bar" role="note"><span><b>Lineage Tracker is in testing.</b> Found a bug or have an idea? Your reports shape it.</span><span class="test-links"><a href="feedback.html?type=bug">Report a bug</a><a href="testers.html">Help test</a></span></div>
+<header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="globe.html">Community (demo)</a><a href="whatsnext.html">What's next</a><a href="get.html">Get the app</a><a class="nav-stay" href="signup.html">Stay in touch</a></nav><a class="nav-support" href="donate.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 4.2 2.4.6-1.2 2.1-2.4 4.2-2.4 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Support</a></div></header>
+<main><div class="su"><h1>Create an account</h1>
+<p>The app is free and never needs an account. A website account is for the community tools we are building. Right now it holds only an alias, your email and the choices below.</p>
+<div id="rg_closed" class="notice warn" hidden><b>Accounts are not open yet.</b> Please check back soon, or <a href="signup.html">join the Stay in touch list</a> and we will tell you.</div>
+<div id="rg_invite" class="notice ok" hidden><b>You were invited.</b> Your email address is filled in. Choose a password below and your account will be ready as soon as you press the button (no confirmation email needed).</div>
+<div id="rg_badinvite" class="notice warn" hidden><b>This invitation link has already been used, or has expired.</b> You can still create an account below; we will send a confirmation email.</div>
+<form id="rg_form" novalidate>
+<label class="fld"><span>Email (required)</span><input id="rg_e" type="email" autocomplete="email" placeholder="you@example.com" maxlength="254"></label>
+<div id="rg_pwbox" hidden><label class="fld"><span>Choose a password (required)</span><input id="rg_p" type="password" autocomplete="new-password" maxlength="100"></label>
+<label class="fld"><span>Type the password again</span><input id="rg_p2" type="password" autocomplete="new-password" maxlength="100"></label>
+<p><button class="btn" id="rg_show" type="button" aria-pressed="false">Show password</button></p>
+<p class="small muted">At least 10 characters. A few unrelated words with spaces or dashes between them is easy to remember and hard to guess, for example <i>compost heap sunrise 77</i>. We check it against lists of passwords that have leaked, without sending the password itself.</p></div>
+<p class="small muted">You will choose your password after you open the link we email you, which also proves the address is yours.</p>
+<fieldset><legend>Your alias</legend><p class="small muted">An alias is shown instead of your name. It is made for you (you cannot type your own) so nobody has to share a real name. It cannot be changed later.</p><div id="rg_aliases"><p class="small muted">Loading…</p></div><p><button class="btn" id="rg_more" type="button">Show me different ones</button></p></fieldset>
+<p id="rg_noextra" class="small muted">Your country, and the emails and plants you want to hear about, are chosen on your account page once you have confirmed. If you are already on the Stay in touch list with this email address, your account takes over from the list when it is confirmed.</p>
+<div id="rg_extra" hidden><div class="two"><label class="fld"><span>Country (optional)</span><select id="rg_c"></select></label><label class="fld"><span>Region (optional)</span><select id="rg_r"><option value="">Prefer not to say</option></select></label></div>
+<fieldset><legend>Emails you would like (optional, all off until you tick them)</legend><div id="rg_svc"><p class="small muted">Loading…</p></div></fieldset>
+<div id="rg_globe"></div>
+<fieldset class="interests" id="rg_intwrap" hidden><legend>What do you grow or keep? (optional)</legend><p class="small muted">Common names only. Only counted on the globe if you tick the globe box above.</p><div id="rg_int"></div></fieldset></div>
+<div class="box"><b>The short version of the terms.</b> You must be 18 or over. One account per person. Be decent, and keep to the law about moving seeds, plants and animals. We can remove content or accounts that cause harm. There are no prices or payments on this site. Read the <a href="terms.html" target="_blank" rel="noopener">full terms</a> (version <span id="rg_terms_v"></span>) and the <a href="privacy.html" target="_blank" rel="noopener">privacy policy</a>.</div>
+<label class="chk"><input id="rg_18" type="checkbox"><span>I am 18 or over.</span></label>
+<label class="chk"><input id="rg_agree" type="checkbox"><span>I agree to the terms and the privacy policy.</span></label>
+<div id="ts"></div>
+<p id="rg_err" class="err" role="alert"></p>
+<button class="btn primary" id="rg_btn" type="submit">Create my account</button></form>
+<div id="rg_done" hidden><h2>Check your email</h2><p>If that address can create an account, we have sent a link to confirm it and to choose your password. The account is switched on only once you open the link, and the link works for 48 hours. If you already have an account, we have emailed you about that instead.</p><p class="small muted">Nothing arrived? Check your spam folder, then <a href="account-confirm.html?resend=1">ask for a new link</a>.</p></div>
+<div id="rg_done_active" hidden><h2>Your account is ready</h2><p>Thank you. You can sign in now.</p><p><a class="btn primary" href="signin.html">Sign in</a></p></div>
+<p class="small muted" style="margin-top:22px">Already have an account? <a href="signin.html">Sign in</a>.</p>
+<noscript><p class="notice warn">This page needs JavaScript.</p></noscript></div></main>
+<footer><div class="wrap"><span>© 2026 Lineage Tracker</span><span><a href="privacy.html">Your data</a> · <a href="terms.html">Terms</a> · <a href="whatsnext.html">What's next</a> · <a href="testers.html">Help test</a> · <a href="feedback.html">Feedback</a> · <a href="signup.html">Stay in touch</a> · <a href="partners.html">Make it yours</a> · <a href="donate.html">Support</a> · <a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">How-to videos</a> · <a href="https://github.com/lxcom83/LineageTracker">GitHub</a></span></div></footer>
+
+<script src="waitlist.js?v=1"></script><script src="acct.js?v=1"></script><script src="register.js?v=1"></script></body>
+</html>

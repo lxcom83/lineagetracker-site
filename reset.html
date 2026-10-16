@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reset your password | Lineage Tracker</title>
+<meta name="description" content="Reset the password for your Lineage Tracker website account.">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://zlekqqzvkstdcrrupzfs.supabase.co; connect-src 'self' https://zlekqqzvkstdcrrupzfs.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; form-action 'self'; base-uri 'self'; object-src 'none'"><meta name="theme-color" content="#F5F2EC">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=24"><link rel="stylesheet" href="waitlist.css?v=1"><link rel="stylesheet" href="accounts.css?v=1">
+</head>
+<body>
+<div class="test-bar" role="note"><span><b>Lineage Tracker is in testing.</b> Found a bug or have an idea? Your reports shape it.</span><span class="test-links"><a href="feedback.html?type=bug">Report a bug</a><a href="testers.html">Help test</a></span></div>
+<header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="globe.html">Community (demo)</a><a href="whatsnext.html">What's next</a><a href="get.html">Get the app</a><a class="nav-stay" href="signup.html">Stay in touch</a></nav><a class="nav-support" href="donate.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 4.2 2.4.6-1.2 2.1-2.4 4.2-2.4 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Support</a></div></header>
+<main><div class="su"><h1>Reset your password</h1>
+<div id="rs_bad" class="notice warn" hidden><b>This link has already been used, or has expired.</b> Ask for a new one below.</div>
+<div id="rs_req" hidden><p>Enter your email address. If it belongs to an account, we will email you a link that works for one hour. We say the same thing either way, so this page cannot be used to find out who has an account.</p>
+<form id="rs_req_form" novalidate><label class="fld"><span>Email</span><input id="rs_e" type="email" autocomplete="email" maxlength="254"></label><div id="ts"></div><p id="rs_req_err" class="err" role="alert"></p><button class="btn primary" id="rs_req_btn" type="submit">Email me a link</button></form>
+<div id="rs_req_done" hidden><h2>Check your email</h2><p>If that address has an account, we have sent a link. It works for one hour and only once.</p></div></div>
+<div id="rs_set" hidden><p>Choose a new password. You will be signed out on every device.</p>
+<form id="rs_set_form" novalidate><label class="fld"><span>New password</span><input id="rs_p" type="password" autocomplete="new-password" maxlength="100"></label><label class="fld"><span>Type it again</span><input id="rs_p2" type="password" autocomplete="new-password" maxlength="100"></label>
+<p><button class="btn" id="rs_show" type="button" aria-pressed="false">Show password</button></p><p class="small muted">At least 10 characters. A few unrelated words with spaces or dashes between them is easy to remember and hard to guess, for example <i>compost heap sunrise 77</i>. We check it against lists of passwords that have leaked, without sending the password itself.</p><p id="rs_set_err" class="err" role="alert"></p><button class="btn primary" id="rs_set_btn" type="submit">Save new password</button></form></div>
+<div id="rs_ok" hidden><h2>Your password has been changed</h2><p>We have emailed you to say so. You can sign in with the new password now.</p><p><a class="btn primary" href="signin.html">Sign in</a></p></div>
+<p class="small muted" style="margin-top:22px"><a href="signin.html">Back to sign in</a></p>
+<noscript><p class="notice warn">This page needs JavaScript.</p></noscript></div></main>
+<footer><div class="wrap"><span>© 2026 Lineage Tracker</span><span><a href="privacy.html">Your data</a> · <a href="terms.html">Terms</a> · <a href="whatsnext.html">What's next</a> · <a href="testers.html">Help test</a> · <a href="feedback.html">Feedback</a> · <a href="signup.html">Stay in touch</a> · <a href="partners.html">Make it yours</a> · <a href="donate.html">Support</a> · <a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">How-to videos</a> · <a href="https://github.com/lxcom83/LineageTracker">GitHub</a></span></div></footer>
+
+<script src="waitlist.js?v=1"></script><script src="acct.js?v=1"></script><script src="reset.js?v=1"></script></body>
+</html>
