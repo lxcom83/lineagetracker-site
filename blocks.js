@@ -32,7 +32,11 @@ window.LTBlocks = (function () {
   }
   function figure(url, caption, alt, w, h) {
     var f = el('figure', { class: 'blk-fig' });
-    if (url) f.appendChild(el('img', { src: url, alt: alt || '', loading: 'lazy', width: w || null, height: h || null }));
+    if (url) {
+      var im = el('img', { src: url, alt: alt || '', loading: 'lazy', width: w || null, height: h || null });
+      im.onerror = function () { im.onerror = null; var m = el('div', { class: 'blk-missing', text: 'Photo not available' }); if (im.parentNode) im.parentNode.replaceChild(m, im); };
+      f.appendChild(im);
+    }
     else f.appendChild(el('div', { class: 'blk-missing', text: 'Photo not available' }));
     if (caption) f.appendChild(el('figcaption', { text: caption }));
     return f;

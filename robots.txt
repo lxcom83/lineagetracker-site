@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /staff.html
+Disallow: /account.html
+Disallow: /write.html
+Disallow: /manage.html
+Disallow: /inbox.html
+Disallow: /signin.html
+Disallow: /reset.html
 
 Sitemap: https://lineagetracker.org/sitemap.xml

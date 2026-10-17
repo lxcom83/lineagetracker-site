@@ -41,7 +41,7 @@
         j.rows.forEach(function (p) {
           var href = 'post.html?p=' + encodeURIComponent(p.slug);
           var card = el('article', { 'class': 'bl-card' });
-          if (p.cover) card.appendChild(el('a', { href: href, 'class': 'bl-cov', tabindex: '-1', 'aria-hidden': 'true' }, [el('img', { src: pubUrl(p.cover), alt: '', loading: 'lazy' })]));
+          if (p.cover) card.appendChild(el('a', { href: href, 'class': 'bl-cov', tabindex: '-1', 'aria-hidden': 'true' }, [(function () { var im = el('img', { src: pubUrl(p.cover), alt: '', loading: 'lazy' }); im.onerror = function () { var a = im.parentNode; if (a && a.parentNode) a.parentNode.removeChild(a); }; return im; })()]));
           var body = el('div', { 'class': 'bl-cb' });
           body.appendChild(el('h2', {}, [el('a', { href: href, text: p.title })]));
           body.appendChild(byline(p));
