@@ -5,11 +5,13 @@
   <url><loc>https://lineagetracker.org/blog.html</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://lineagetracker.org/animals.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://lineagetracker.org/whatsnext.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lineagetracker.org/examples.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://lineagetracker.org/get.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://lineagetracker.org/partners.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://lineagetracker.org/testers.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://lineagetracker.org/feedback.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://lineagetracker.org/donate.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lineagetracker.org/control.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://lineagetracker.org/privacy.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://lineagetracker.org/signup.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://lineagetracker.org/terms.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>

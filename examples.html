@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Try an example | Lineage Tracker</title>
+<meta name="description" content="Open a made-up plant or animal example in the app and tap anything. Nothing touches your own records.">
+<meta property="og:title" content="Try an example | Lineage Tracker">
+<meta property="og:description" content="Open a made-up example in the app and tap anything.">
+<meta property="og:image" content="https://lineagetracker.org/img/og.png">
+<meta name="theme-color" content="#F5F2EC">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=25">
+<!-- Google tag (gtag.js): counts visits to the website only. The app itself sends nothing. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T2646RWNH5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T2646RWNH5', { allow_google_signals: false, allow_ad_personalization_signals: false });
+</script>
+<style id="howto-css">
+.lead{font-size:1.1rem}
+.howtbl{display:block;overflow-x:auto;width:100%;border-collapse:collapse;margin:18px 0 6px;font-size:.95rem;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.howtbl th,.howtbl td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.howtbl th{background:var(--sunk);color:var(--navy)}
+.dtabs,.btabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 6px}
+.dtab,.btab{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--navy);border-radius:999px;padding:10px 18px;font-weight:700}
+.dtab{font-size:1.05rem;padding:12px 22px}.dtab[aria-selected=true],.btab[aria-selected=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.js .devgrp,.js .brw{display:none}.js .devgrp.on,.js .brw.on{display:block}
+.devgrp{margin-top:8px}.devgrp>h3{display:none}.js .devgrp>h3{display:none}.brw{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:12px 0;padding:6px 18px}
+.brw h4{margin:12px 0 0;color:var(--navy);font-size:1.15rem}.bnote{color:var(--muted);margin:6px 0 4px}.hsteps{padding-left:22px;margin:10px 0}.hsteps li{margin:0 0 20px;line-height:1.5}
+.shot{margin:10px 0 0;max-width:360px}.shot img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;background:var(--sunk)}
+.shot-ph{border:2px dashed var(--line);border-radius:12px;background:var(--sunk);color:var(--muted);padding:34px 14px;text-align:center;font-weight:700}.shot-ph small{display:block;font-weight:400;margin-top:6px}
+.worked{background:var(--sunk);border-radius:10px;padding:10px 14px;margin:6px 0 16px}
+.trouble ul{margin:8px 0 0;padding-left:20px}.trouble li{margin:6px 0}
+@media (max-width:640px){.howtbl{overflow:visible}.howtbl thead{display:none}.howtbl tbody,.howtbl tr,.howtbl td{display:block}.howtbl tr{padding:10px 14px;border-bottom:1px solid var(--line)}.howtbl tr:last-child{border-bottom:0}
+.howtbl td{border:0;padding:1px 0}.howtbl td:nth-child(1),.howtbl td:nth-child(2){display:inline;font-weight:700;color:var(--navy)}.howtbl td:nth-child(1)::after{content:", "}
+.howtbl td:nth-child(3)::before{content:"Can it install? "}.howtbl td:nth-child(4)::before{content:"Where: "}.howtbl td:nth-child(3)::before,.howtbl td:nth-child(4)::before{color:var(--muted)}}
+</style></head>
+<body>
+<div class="top-banner" role="note"><span class="tb-give"><b>Free forever, kept running by donations.</b> For the price of a packet of seed, you can keep it going for another year. <a class="tb-support" href="donate.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 4.2 2.4.6-1.2 2.1-2.4 4.2-2.4 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Support</a></span><span class="tb-test">In testing: <a href="feedback.html?type=bug">Report a bug</a></span></div>
+<header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="https://tools.lineagetracker.org/">Tools</a><a href="blog.html">Blog</a><a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">Videos</a><a href="whatsnext.html">What's next</a><a href="get.html">Get the app</a></nav><a class="nav-open" href="https://app.lineagetracker.org/">Open the app</a></div></header>
+<main>
+<style>
+.ex-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}
+.ex-tabs button{font:inherit;font-weight:700;padding:10px 18px;border-radius:999px;border:1.5px solid var(--line,#cfc8b8);background:transparent;color:inherit;cursor:pointer}
+.ex-tabs button[aria-selected=true]{background:#1f3557;border-color:#1f3557;color:#fff}
+.ex-tabs button:focus-visible{outline:3px solid #c97b3d;outline-offset:2px}
+.ex-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start}
+.ex-pics{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;align-items:start}
+.ex-pics img{width:100%;height:auto;border-radius:12px;border:1px solid rgba(0,0,0,.12)}
+.ex-feat{margin-top:-4px}
+@media(max-width:760px){.ex-grid{grid-template-columns:1fr}}
+</style>
+<div class="wrap" style="padding:40px 22px 40px"><h1>Try an example</h1>
+<p class="lede">Open a made-up example in the app and tap anything. Nothing here touches your own records.</p>
+<div class="ex-tabs" role="tablist" aria-label="Examples"><button role="tab" id="t-plants" aria-controls="p-plants" aria-selected="true" data-k="plants">Plants</button><button role="tab" id="t-chickens" aria-controls="p-chickens" aria-selected="false" data-k="chickens">Chickens</button><button role="tab" id="t-pigs" aria-controls="p-pigs" aria-selected="false" data-k="pigs">Pigs</button><button role="tab" id="t-olive" aria-controls="p-olive" aria-selected="false" data-k="olive">Olive Egger</button></div>
+<div class="ex-panel" role="tabpanel" id="p-plants" aria-labelledby="t-plants">
+<div class="ex-grid"><div class="ex-pics"><img src="img/examples/plants.webp" alt="Cartoon illustration for the Pantry Keeper squash example" width="640" height="480" loading="lazy"><img class="ex-app" src="img/examples/plants-app.webp" alt="The Pantry Keeper squash example open in the app" width="430" height="900" loading="lazy"></div>
+<div class="ex-text"><h2>Pantry Keeper squash</h2><p>A squash project with an F2 family, a bring-back plan and storage trials. Shows the seed library, crosses, selection against a goal and the planting plan.</p><p class="ex-feat"><b>Shows:</b> Seed library, crosses, storage trials, bring-back plan.</p>
+<div class="actions"><a class="btn" href="https://app.lineagetracker.org/#/try/plants">Try it in the app</a><a class="btn alt" href="examples/plants-example.json" download>Download the sample file (1.2 MB)</a></div>
+<p class="small muted">Everything in it is made up, including the names, numbers and companies. Pictures are cartoon illustrations tagged SAMPLE IMAGE. It opens in its own workspace and never mixes with your own records. Remove it any time from Settings.</p></div></div></div>
+<div class="ex-panel" role="tabpanel" id="p-chickens" aria-labelledby="t-chickens" hidden>
+<div class="ex-grid"><div class="ex-pics"><img src="img/examples/chickens.webp" alt="Cartoon illustration for the Blue Australorp laying line example" width="640" height="480" loading="lazy"><img class="ex-app" src="img/examples/chickens-app.webp" alt="The Blue Australorp laying line example open in the app" width="430" height="900" loading="lazy"></div>
+<div class="ex-text"><h2>Blue Australorp laying line</h2><p>A laying line across three generations: breeding pen, egg counts, weigh-ins and a pedigree you can trace.</p><p class="ex-feat"><b>Shows:</b> Pedigree, egg counts, weigh-ins, hatch dates.</p>
+<div class="actions"><a class="btn" href="https://app.lineagetracker.org/#/try/animals">Try it in the app</a><a class="btn alt" href="examples/animals-example.json" download>Download the sample file (0.6 MB)</a></div>
+<p class="small muted">Everything in it is made up, including the names, numbers and companies. Pictures are cartoon illustrations tagged SAMPLE IMAGE. It opens in its own workspace and never mixes with your own records. Remove it any time from Settings.</p></div></div></div>
+<div class="ex-panel" role="tabpanel" id="p-pigs" aria-labelledby="t-pigs" hidden>
+<div class="ex-grid"><div class="ex-pics"><img src="img/examples/pigs.webp" alt="Cartoon illustration for the Kunekune herd example" width="640" height="480" loading="lazy"><img class="ex-app" src="img/examples/pigs-app.webp" alt="The Kunekune herd example open in the app" width="430" height="900" loading="lazy"></div>
+<div class="ex-text"><h2>Kunekune herd</h2><p>A small heritage herd on pasture: three colours, five litters, a pregnant sow with a birth-due reminder, paddock rotation, worming with withholding periods and a breeding plan.</p><p class="ex-feat"><b>Shows:</b> Litters, farrowing dates, paddocks, worming and vaccines, outcross plan.</p>
+<div class="actions"><a class="btn" href="https://app.lineagetracker.org/#/try/pigs">Try it in the app</a><a class="btn alt" href="examples/pigs-example.json" download>Download the sample file (0.6 MB)</a></div>
+<p class="small muted">Everything in it is made up, including the names, numbers and companies. Pictures are cartoon illustrations tagged SAMPLE IMAGE. It opens in its own workspace and never mixes with your own records. Remove it any time from Settings.</p></div></div></div>
+<div class="ex-panel" role="tabpanel" id="p-olive" aria-labelledby="t-olive" hidden>
+<div class="ex-grid"><div class="ex-pics"><img src="img/examples/olive.webp" alt="Cartoon illustration for the Olive Egger line example" width="640" height="480" loading="lazy"><img class="ex-app" src="img/examples/olive-app.webp" alt="The Olive Egger line example open in the app" width="430" height="900" loading="lazy"></div>
+<div class="ex-text"><h2>Olive Egger line</h2><p>A multi-founder chicken project: blue and brown egg layers crossed for olive eggs, with a genetics prediction, backcrosses and a breeding plan.</p><p class="ex-feat"><b>Shows:</b> Founders, genetics prediction, backcross plan, egg colour scores.</p>
+<div class="actions"><a class="btn" href="https://app.lineagetracker.org/#/try/olive">Try it in the app</a><a class="btn alt" href="examples/olive-example.json" download>Download the sample file (0.7 MB)</a></div>
+<p class="small muted">Everything in it is made up, including the names, numbers and companies. Pictures are cartoon illustrations tagged SAMPLE IMAGE. It opens in its own workspace and never mixes with your own records. Remove it any time from Settings.</p></div></div></div>
+</div>
+<script>
+(function(){var tabs=[].slice.call(document.querySelectorAll('.ex-tabs button')),panels=[].slice.call(document.querySelectorAll('.ex-panel'));
+function show(k,focus){tabs.forEach(function(b){var on=b.dataset.k===k;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;if(on&&focus)b.focus();});panels.forEach(function(p){p.hidden=p.id!=='p-'+k;});try{history.replaceState(null,'','#'+k);}catch(e){}}
+tabs.forEach(function(b,i){b.addEventListener('click',function(){show(b.dataset.k);});b.addEventListener('keydown',function(e){var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(d){e.preventDefault();show(tabs[(i+d+tabs.length)%tabs.length].dataset.k,true);}});});
+var h=(location.hash||'').slice(1);show(tabs.some(function(b){return b.dataset.k===h;})?h:tabs[0].dataset.k);})();
+</script>
+</main>
+<footer><div class="wrap"><div class="fcols"><div class="fcol"><h2>The app</h2><ul><li><a href="https://app.lineagetracker.org/">Open the app</a></li><li><a href="get.html">Get the app</a></li><li><a href="plants.html">For plants</a></li><li><a href="animals.html">For animals</a></li><li><a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">How-to videos</a></li></ul></div><div class="fcol"><h2>LT tools</h2><ul><li><a href="https://tools.lineagetracker.org/">All tools</a></li><li><a href="https://tools.lineagetracker.org/print/">LT-Print: labels and stickers</a></li><li><a href="https://tools.lineagetracker.org/planner/">LT-Planner: garden and farm</a></li></ul></div><div class="fcol"><h2>Community</h2><ul><li><a href="blog.html">Member blog</a></li><li><a href="signup.html">Stay in touch</a></li><li><a href="globe.html">Community globe (demo)</a></li><li><a href="testers.html">Help test</a></li><li><a href="feedback.html?type=bug">Report a bug</a></li><li><a href="feedback.html">Feedback and ideas</a></li></ul></div><div class="fcol"><h2>Lineage Tracker</h2><ul><li><a href="whatsnext.html">What's next</a></li><li><a href="partners.html">Make it yours (clubs)</a></li><li><a href="donate.html">Support us</a></li><li><a href="https://github.com/lxcom83/LineageTracker">GitHub</a></li><li><a href="privacy.html">Your data</a></li><li><a href="terms.html">Terms</a></li></ul></div></div><p class="fline">© 2026 Lineage Tracker. Free forever: no ads, no paid tiers, and your records stay on your own device.</p></div></footer>
+<script>(function(){try{document.documentElement.classList.add('js');
+var u=navigator.userAgent,dev=/iPhone|iPad|iPod/.test(u)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)?'apple':/Android/.test(u)?'android':'computer';
+var br=/SamsungBrowser/.test(u)?'samsung':/Android/.test(u)?(/EdgA/.test(u)?'edge-a':/Firefox/.test(u)?'firefox-a':'chrome'):dev==='apple'?(/CriOS|EdgiOS|FxiOS/.test(u)?'ios-other':'safari'):/Edg\//.test(u)?'edge-c':/Firefox/.test(u)?'firefox-c':(/Safari/.test(u)&&!/Chrome/.test(u))?'safari-c':'chrome-c';
+var $=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function showB(g,id){$('.brw',g).forEach(function(p){p.classList.toggle('on',p.id===id)});$('.btab',g).forEach(function(b){b.setAttribute('aria-selected',b.dataset.b===id)})}
+function showD(id){$('.devgrp').forEach(function(g){var on=g.id==='dev-'+id;g.classList.toggle('on',on);if(on&&!$('.brw.on',g).length)showB(g,$('.brw',g)[0].id)});$('.dtab').forEach(function(b){b.setAttribute('aria-selected',b.dataset.dev===id)})}
+$('.dtab').forEach(function(b){b.onclick=function(){showD(b.dataset.dev)}});
+$('.btab').forEach(function(b){b.onclick=function(){showB(b.closest('.devgrp'),b.dataset.b)}});
+showD(dev);var p=document.getElementById(br);if(p&&p.closest('#dev-'+dev))showB(p.closest('.devgrp'),br)}catch(e){document.documentElement.classList.remove('js')}})();</script></body>
+</html>
