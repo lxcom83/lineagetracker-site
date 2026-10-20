@@ -1,9 +1,12 @@
-/* Make it yours: builds a partner link for Lineage Tracker. Everything goes into the link; nothing is uploaded. */
+/* Make it yours: members make a partner version of Lineage Tracker here.  It needs a free website account.  A new version waits for staff
+   approval; approval signs the link on the server, and the app checks the signature on the device.  Nothing about the people who use a
+   version is sent here. */
 (function () {
   var f = document.getElementById('pk'); if (!f) return;
+  var A = window.AC, el = A.el, $ = function (id) { return document.getElementById(id); }, editing = null;
   var LIB = '', LIBN = 0;
   function v(n) { var e = f.elements[n]; return e ? String(e.value || '').trim() : ''; }
-  function fnv(s) { var h = 0x811c9dc5; for (var ch of s) { h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
+  function fnv0(s) { var h = 0x811c9dc5; for (var ch of s) { h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   function b64url(bytes) { var s = ''; for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
   function cfg() {
     var h = [].slice.call(f.querySelectorAll('input[name=h]:checked')).map(function (x) { return x.value; });
@@ -69,29 +72,92 @@
     } catch (e) { info.textContent = 'That file could not be read. Save the spreadsheet as CSV and try again.'; }
   });
 
+
+  var ERR = { partners_closed: 'Making new versions is not open yet.', need_name: 'Give your version a name.', too_big: 'That is too large. Use a smaller variety list.', too_many: 'You can have up to 5 versions at a time. Withdraw one first.',
+    weekly_limit: 'You can make up to 10 a week. Please try again in a few days.', not_editable: 'A live version cannot be edited. Make a new one instead.', not_approved: 'That version is not live.', partners_off: 'Partner versions are paused for now.',
+    not_found: 'That version no longer exists.', slow_down: 'Too many changes in a short time. Please wait a moment.', bad_request: 'Something in the form could not be used.' };
+  var STATUS = { pending: 'Waiting for review', changes: 'Changes asked for', rejected: 'Not accepted', approved: 'Live', disabled: 'Switched off' };
+  var REASONS = { impersonation: 'It looks like it speaks for an organisation that has not asked for it.', selling: 'It reads as an advert.', contact_details: 'Please take out phone numbers, email or home addresses.',
+    offensive: 'Some of the wording is not suitable.', not_clear: 'It is not clear what the version is for.', logo_problem: 'The logo does not load or is not suitable.', link_problem: 'A web address in it does not work.',
+    misuse: 'It was reported or misused.', expired: 'It has expired.', other: 'See the note from the reviewer.' };
+  var msg = function (j) { return ERR[j.error] || A.say(j.error); };
+  var call = function (body) { return A.fnAuthed('partners', body).then(function (r) { var j = r.body || {}; return j.ok ? j : { ok: false, error: j.error || (r.status === 0 ? 'network' : 'server') }; }); };
+  var fmt = function (t) { try { return new Date(t).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; } };
+  function showErr(m) { var e = $('err'); e.textContent = m; e.hidden = false; e.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+
+  function fill(c) {
+    ['n', 'o', 'l', 'w', 'u', 'k', 'm', 'c'].forEach(function (k) { if (f.elements[k]) f.elements[k].value = c[k] || (k === 'k' ? 'plants' : ''); });
+    if (f.elements.p) f.elements.p.value = c.p || '#1F3557'; if (f.elements.a) f.elements.a.value = c.a || '#D9915F';
+    [].slice.call(f.querySelectorAll('input[name=h]')).forEach(function (x) { x.checked = (c.h || []).indexOf(x.value) >= 0; });
+    LIB = c.L || ''; $('libInfo').textContent = LIB ? 'The variety list you sent before is kept. Choose a file to replace it.' : ''; prev();
+  }
+  function reset() { editing = null; f.reset(); LIB = ''; LIBN = 0; $('libInfo').textContent = ''; $('agree').checked = false; $('pk_title').textContent = 'Build your version'; $('pk_cancel').hidden = true; prev(); }
+  $('pk_cancel').addEventListener('click', reset);
+
   f.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var err = document.getElementById('err'); err.hidden = true;
-    function bad(m) { err.textContent = m; err.hidden = false; err.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    e.preventDefault(); $('err').hidden = true;
     var c = cfg();
-    if (!c.n) return bad('Give your version a name.');
-    if (c.l && !/^https:\/\//i.test(c.l)) return bad('The logo address must start with https://');
-    if (c.u && !/^https:\/\//i.test(c.u)) return bad('Your website address must start with https://');
-    if (c.c && !/^https:\/\//i.test(c.c)) return bad('The variety list address must start with https://');
-    if (!document.getElementById('agree').checked) return bad('Please agree to the relabelling terms first.');
-    var link = 'https://app.lineagetracker.org/#/partner?c=' + b64url(new TextEncoder().encode(JSON.stringify(c)));
-    document.getElementById('link').value = link; document.getElementById('open').href = link;
-    document.getElementById('pid').textContent = fnv((c.n || '') + '|' + (c.o || '') + '|' + (c.u || ''));
-    var qrBox = document.getElementById('qr'), dl = document.getElementById('dlqr');
-    try { qrBox.innerHTML = QR.svg(link, { dark: '#000' }); dl.hidden = false; }
-    catch (x) { qrBox.innerHTML = '<p class="small muted">' + (LIBN ? 'Your link carries your variety list, so it is too long for a QR code. Share the link itself, or make a second link without the list for flyers.' : 'This link is too long for a QR code. Shorten the welcome message to get one.') + '</p>'; dl.hidden = true; }
-    var out = document.getElementById('out'); out.hidden = false; out.scrollIntoView({ behavior: 'smooth' });
+    if (!c.n) return showErr('Give your version a name.');
+    if (c.l && !/^https:\/\//i.test(c.l)) return showErr('The logo address must start with https://');
+    if (c.u && !/^https:\/\//i.test(c.u)) return showErr('Your website address must start with https://');
+    if (c.c && !/^https:\/\//i.test(c.c)) return showErr('The variety list address must start with https://');
+    if (!$('agree').checked) return showErr('Please agree to the relabelling terms first.');
+    var b = $('pk_send'); b.disabled = true;
+    call({ action: 'save', id: editing, cfg: c }).then(function (j) {
+      b.disabled = false;
+      if (!j.ok) return showErr(msg(j));
+      reset(); $('pk_sent').hidden = false; $('pk_sent').scrollIntoView({ behavior: 'smooth' }); loadMine();
+    });
   });
-  document.getElementById('copy').addEventListener('click', function () {
-    var i = document.getElementById('link'), b = this; i.select();
-    (navigator.clipboard ? navigator.clipboard.writeText(i.value) : Promise.reject()).then(function () { b.textContent = 'Copied'; }, function () { document.execCommand('copy'); b.textContent = 'Copied'; });
-  });
-  document.getElementById('dlqr').addEventListener('click', function () {
-    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([document.getElementById('qr').innerHTML], { type: 'image/svg+xml' })); a.download = 'lineage-tracker-qr.svg'; a.click();
+
+  /* ---------- your versions ---------- */
+  function linkBox(it) {
+    var box = el('div', { 'class': 'linkbox' }), inp = el('input', { readonly: 'readonly', value: it.link, 'aria-label': 'Your link' });
+    var cp = el('button', { 'class': 'btn primary', type: 'button', text: 'Copy link' });
+    cp.addEventListener('click', function () { inp.select(); (navigator.clipboard ? navigator.clipboard.writeText(inp.value) : Promise.reject()).then(function () { cp.textContent = 'Copied'; }, function () { document.execCommand('copy'); cp.textContent = 'Copied'; }); });
+    var op = el('a', { 'class': 'btn', href: it.link, target: '_blank', rel: 'noopener', text: 'Open it' });
+    var wrap = el('div', {}, [box, el('div', { 'class': 'actions' }, [cp, op])]); box.appendChild(inp);
+    var q = el('div', { 'class': 'qrbox' }); try { q.innerHTML = QR.svg(it.link, { dark: '#000' }); var dl = el('button', { 'class': 'btn', type: 'button', text: 'Download QR code' }); dl.onclick = function () { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([q.innerHTML], { type: 'image/svg+xml' })); a.download = 'lineage-tracker-qr.svg'; a.click(); }; wrap.lastChild.appendChild(dl); wrap.appendChild(q); } catch (x) { wrap.appendChild(el('p', { 'class': 'small muted', text: 'Your link carries your variety list, so it is too long for a QR code. Share the link itself.' })); }
+    return wrap;
+  }
+  function loadMine() {
+    var box = $('pk_mine'); box.textContent = 'Loading…';
+    call({ action: 'mine' }).then(function (j) {
+      box.textContent = '';
+      if (!j.ok) { box.appendChild(el('p', { 'class': 'err', text: msg(j) })); return; }
+      $('pk_closed').hidden = j.open; f.hidden = !j.open; if (!j.open) $('pk_buildhead').hidden = true; else $('pk_buildhead').hidden = false;
+      $('pk_off').hidden = j.live;
+      if (!j.items.length) { box.appendChild(el('p', { 'class': 'muted', text: 'You have not made one yet.' })); return; }
+      j.items.forEach(function (it) {
+        var chip = el('span', { 'class': 'chip' + (it.status === 'approved' ? ' ok' : it.status === 'changes' || it.status === 'rejected' || it.status === 'disabled' ? ' warn' : ''), text: STATUS[it.status] || it.status });
+        var card = el('div', { 'class': 'notice' }, [el('p', {}, [el('b', { text: it.name + ' ' }), chip]), el('p', { 'class': 'small muted', text: 'Made ' + fmt(it.created_at) + (it.exp && it.status === 'approved' ? ' · link good until ' + fmt(it.exp) : '') })]);
+        if (it.reason && (it.status === 'changes' || it.status === 'rejected' || it.status === 'disabled')) {
+          var rb = el('div', { 'class': 'notice warn small' }, [el('b', { text: 'From the reviewer: ' }), document.createTextNode(REASONS[it.reason] || '')]); if (it.note) rb.appendChild(el('p', { text: it.note })); card.appendChild(rb);
+        }
+        var acts = el('div', { 'class': 'actions tight' });
+        if (it.status === 'approved' && it.link) {
+          card.appendChild(el('p', { text: 'Share this with your members, on your website, in newsletters or on flyers.' })); card.appendChild(linkBox(it));
+          var rn = el('button', { 'class': 'btn', type: 'button', text: 'Renew for another 12 months' });
+          rn.onclick = function () { rn.disabled = true; call({ action: 'renew', id: it.id }).then(function (r) { if (!r.ok) { rn.disabled = false; return showErr(msg(r)); } loadMine(); }); };
+          acts.appendChild(rn);
+          card.appendChild(el('p', { 'class': 'small muted', text: 'When you renew, the link changes. Share the new link: people using the old one go back to plain Lineage Tracker when it runs out, and keep all their records.' }));
+        }
+        if (['pending', 'changes', 'rejected'].indexOf(it.status) >= 0) {
+          var ed = el('button', { 'class': 'btn primary', type: 'button', text: it.status === 'pending' ? 'Change it' : 'Change it and send again' });
+          ed.onclick = function () { call({ action: 'get', id: it.id }).then(function (r) { if (!r.ok) return showErr(msg(r)); var c = {}; try { c = JSON.parse(r.partner.cfg); } catch (x) { /* empty */ } editing = it.id; fill(c); $('pk_title').textContent = 'Change your version'; $('pk_cancel').hidden = false; $('pk_build').scrollIntoView({ behavior: 'smooth' }); }); };
+          acts.appendChild(ed);
+        }
+        var wd = el('button', { 'class': 'btn danger', type: 'button', text: it.status === 'approved' ? 'Switch it off for good' : 'Delete it' });
+        wd.onclick = function () { if (!confirm(it.status === 'approved' ? 'Switch this version off for good? People using it go back to plain Lineage Tracker, and keep their records.' : 'Delete this version?')) return; call({ action: 'withdraw', id: it.id }).then(function (r) { if (!r.ok) return showErr(msg(r)); loadMine(); }); };
+        acts.appendChild(wd); card.appendChild(acts); box.appendChild(card);
+      });
+    });
+  }
+
+  /* ---------- sign-in gate ---------- */
+  if (!A.getSession()) { $('pk_gate').hidden = false; f.hidden = true; $('pk_buildhead').hidden = true; $('pk_account').hidden = true; return; }
+  A.whoAmI().then(function (w) {
+    if (w.state !== 'active') { $('pk_gate').hidden = false; f.hidden = true; $('pk_buildhead').hidden = true; $('pk_account').hidden = true; return; }
+    $('pk_account').hidden = false; loadMine();
   });
 })();

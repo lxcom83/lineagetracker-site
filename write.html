@@ -11,12 +11,12 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=25"><link rel="stylesheet" href="waitlist.css?v=1"><link rel="stylesheet" href="accounts.css?v=1">
+<link rel="stylesheet" href="style.css?v=25"><link rel="stylesheet" href="waitlist.css?v=1"><link rel="stylesheet" href="accounts.css?v=2">
 </head>
 <body>
 <div class="top-banner" role="note"><span class="tb-give"><b>Free forever, kept running by donations.</b> For the price of a packet of seed, you can keep it going for another year. <a class="tb-support" href="donate.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 4.2 2.4.6-1.2 2.1-2.4 4.2-2.4 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Support</a></span><span class="tb-test">In testing: <a href="feedback.html?type=bug">Report a bug</a></span></div>
 <header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="https://tools.lineagetracker.org/">Tools</a><a href="blog.html" aria-current="page">Blog</a><a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">Videos</a><a href="whatsnext.html">What's next</a><a href="get.html">Get the app</a></nav><a class="nav-open" href="https://app.lineagetracker.org/">Open the app</a></div></header>
-<main><div class="su wide"><h1>Write for the blog</h1>
+<main><div class="su wide wr-page"><p class="small"><a href="account.html">&larr; Your account</a> &middot; <a href="blog.html">Read the blog</a></p><h1>Write for the blog</h1>
 <p id="wr_list_msg" class="err" role="alert"></p>
 <div id="wr_main" hidden>
 <div id="wr_list">
@@ -29,7 +29,12 @@
 <p><button class="btn" id="wr_back" type="button">&larr; Your posts</button> <span id="wr_status" class="small muted"></span></p>
 <label class="fld"><span>Title</span><input id="wr_title" maxlength="120" placeholder="For example: First fruit on the Arrakis Black cross"></label>
 <p class="small muted">Build the post from blocks: text, headings, photos, lists, quotes and YouTube links. Drag a block by its handle, or use the arrows, to move it.</p>
-<div id="wr_editor"></div>
+<details class="wr-paste" id="wr_paste_box"><summary>Paste a whole article</summary>
+<p class="small muted">Paste text you wrote somewhere else. Blank lines start a new paragraph. Start a line with # for a heading, - for a list, 1. for a numbered list or &gt; for a quote. **bold**, *italic* and [text](https://link) work too. Photos are added afterwards in the editor.</p>
+<textarea id="wr_paste" rows="8" maxlength="60000" aria-label="Article text to paste"></textarea>
+<p id="wr_paste_msg" class="small muted" role="status"></p>
+<p><button class="btn" id="wr_paste_go" type="button">Add to the post</button></p></details>
+<div class="wr-split"><div class="wr-ed"><div id="wr_editor"></div></div><aside class="wr-live" aria-label="Live preview" id="wr_live_box"><p class="small muted">Live preview</p><article id="wr_live" class="blog-post"></article></aside></div>
 <div class="wr-set"><fieldset><legend>Kind of post (choose 1 to 3)</legend><div id="wr_kinds"></div></fieldset>
 <details><summary>Plants or animals it is about (optional)</summary><div id="wr_topics"></div></details>
 <fieldset><legend>Show my name as</legend>
@@ -37,6 +42,7 @@
 <label class="chk"><input type="radio" name="wr_by" id="wr_by_name" value="name"><span>A name for this post</span></label>
 <div id="wr_name_box" hidden><label class="fld"><span>Name to show</span><input id="wr_name" maxlength="60"></label><p class="small muted">Only your own name. Our staff check it is not someone else&rsquo;s. Club and group names will come later.</p></div>
 </fieldset></div>
+<label class="fld" id="wr_when_box"><span>Would you like it to appear on a certain day? (optional)</span><input id="wr_when" type="date"></label><p class="small muted" id="wr_when_note">Leave it empty and it appears as soon as our team approves it. The team may choose a different day.</p>
 <p id="wr_msg" class="err" role="alert"></p><p id="wr_state" class="small muted" role="status"></p>
 <div class="actions"><button class="btn" id="wr_save" type="button">Save draft</button><button class="btn" id="wr_preview_btn" type="button">Preview</button><button class="btn primary" id="wr_submit" type="button">Send for review</button></div>
 <div class="actions"><button class="btn danger" id="wr_withdraw" type="button" hidden>Take it off the blog</button><button class="btn danger" id="wr_delete" type="button">Delete this post</button></div>
@@ -49,7 +55,7 @@
 <div class="actions"><button class="btn primary" id="wr_agree_send" type="button">Agree and send</button><button class="btn" id="wr_agree_cancel" type="button">Not now</button></div></div></div>
 </div>
 <noscript><p class="notice warn">This page needs JavaScript.</p></noscript></div></main>
-<footer><div class="wrap"><div class="fcols"><div class="fcol"><h2>The app</h2><ul><li><a href="https://app.lineagetracker.org/">Open the app</a></li><li><a href="get.html">Get the app</a></li><li><a href="plants.html">For plants</a></li><li><a href="animals.html">For animals</a></li><li><a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">How-to videos</a></li></ul></div><div class="fcol"><h2>LT tools</h2><ul><li><a href="https://tools.lineagetracker.org/">All tools</a></li><li><a href="https://tools.lineagetracker.org/print/">LT-Print: labels and stickers</a></li><li><a href="https://tools.lineagetracker.org/planner/">LT-Planner: garden and farm</a></li></ul></div><div class="fcol"><h2>Community</h2><ul><li><a href="blog.html">Member blog</a></li><li><a href="signup.html">Stay in touch</a></li><li><a href="globe.html">Community globe (demo)</a></li><li><a href="testers.html">Help test</a></li><li><a href="feedback.html?type=bug">Report a bug</a></li><li><a href="feedback.html">Feedback and ideas</a></li></ul></div><div class="fcol"><h2>Lineage Tracker</h2><ul><li><a href="whatsnext.html">What's next</a></li><li><a href="partners.html">Make it yours (clubs)</a></li><li><a href="donate.html">Support us</a></li><li><a href="https://github.com/lxcom83/LineageTracker">GitHub</a></li><li><a href="privacy.html">Your data</a></li><li><a href="terms.html">Terms</a></li></ul></div></div><p class="fline">© 2026 Lineage Tracker. Free forever: no ads, no paid tiers, and your records stay on your own device.</p></div></footer>
+<footer><div class="wrap"><div class="fcols"><div class="fcol"><h2>The app</h2><ul><li><a href="https://app.lineagetracker.org/">Open the app</a></li><li><a href="get.html">Get the app</a></li><li><a href="plants.html">For plants</a></li><li><a href="animals.html">For animals</a></li><li><a href="examples.html">Examples to try</a></li><li><a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">How-to videos</a></li></ul></div><div class="fcol"><h2>LT tools</h2><ul><li><a href="https://tools.lineagetracker.org/">All tools</a></li><li><a href="https://tools.lineagetracker.org/print/">LT-Print: labels and stickers</a></li><li><a href="https://tools.lineagetracker.org/planner/">LT-Planner: garden and farm</a></li></ul></div><div class="fcol"><h2>Community</h2><ul><li><a href="blog.html">Member blog</a></li><li><a href="signup.html">Stay in touch</a></li><li><a href="globe.html">Community globe (demo)</a></li><li><a href="testers.html">Help test</a></li><li><a href="feedback.html?type=bug">Report a bug</a></li><li><a href="feedback.html">Feedback and ideas</a></li></ul></div><div class="fcol"><h2>Lineage Tracker</h2><ul><li><a href="whatsnext.html">What's next</a></li><li><a href="partners.html">Make it yours (clubs)</a></li><li><a href="donate.html">Support us</a></li><li><a href="https://github.com/lxcom83/LineageTracker">GitHub</a></li><li><a href="privacy.html">Your data</a></li><li><a href="terms.html">Terms</a></li></ul></div></div><p class="fline">© 2026 Lineage Tracker. Free forever: no ads, no paid tiers, and your records stay on your own device.</p></div></footer>
 
-<script src="waitlist.js?v=1"></script><script src="acct.js?v=1"></script><script src="blocks.js?v=2"></script><script src="write.js?v=1"></script></body>
+<script src="waitlist.js?v=1"></script><script src="acct.js?v=1"></script><script src="blocks.js?v=3"></script><script src="write.js?v=4"></script></body>
 </html>

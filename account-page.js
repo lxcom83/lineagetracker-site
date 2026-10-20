@@ -105,7 +105,8 @@
         if (!r.ok || !r.body) { say(m, A.say('server')); return null; }
         // blog posts too, once the blog is installed (no blog yet = nothing to add)
         return A.rpc('member_blog_export').then(function (bx) { var out = r.body; if (bx.ok && bx.body) out.blog = bx.body; return out; }, function () { return r.body; })
-          .then(function (out) { return A.rpc('member_tools_export').then(function (tx) { if (tx.ok && tx.body) out.tools = tx.body; return out; }, function () { return out; }); });
+          .then(function (out) { return A.rpc('member_tools_export').then(function (tx) { if (tx.ok && tx.body) out.tools = tx.body; return out; }, function () { return out; }); })
+          .then(function (out) { return A.rpc('member_partners_export').then(function (px) { if (px.ok && px.body && px.body.length) out.partner_versions = px.body; return out; }, function () { return out; }); });
       }).then(function (data) {
         if (!data) return;
         var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }), a = document.createElement('a');

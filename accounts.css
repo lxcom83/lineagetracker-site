@@ -108,3 +108,15 @@ nav a.nav-signin{font-weight:700}
 .modal-in{background:var(--paper);color:var(--ink);border-radius:16px;max-width:780px;width:100%;padding:18px 20px}
 .st-preview{border:1.5px solid var(--line);border-radius:14px;padding:12px 18px;margin:12px 0;background:var(--card)}
 @media (max-width:480px){.be-block.t-p .be-name,.be-block.t-quote .be-name,.be-block.t-ul .be-name,.be-block.t-ol .be-name{display:none}.be-fmt{margin-right:auto}.be-mini{min-width:36px}}
+
+/* Write page: paste an article, and a live preview beside the editor on wide screens */
+.wr-paste{background:var(--sunk);border-radius:14px;padding:10px 16px;margin:12px 0}
+.wr-paste summary{font-weight:700;cursor:pointer}
+.wr-paste textarea{width:100%;box-sizing:border-box;font:inherit;padding:8px;border:1px solid var(--line,#ccc);border-radius:10px;background:var(--paper);color:var(--ink)}
+.wr-split{display:block}
+.wr-live{display:none}
+@media (min-width:1100px){
+  .su.wr-page{max-width:1280px}
+  .wr-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+  .wr-live{display:block;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;background:var(--paper);border:1px solid var(--line,#ddd);border-radius:14px;padding:12px 18px}
+}

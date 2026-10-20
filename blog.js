@@ -27,6 +27,7 @@
 
   /* ---------- blog.html ---------- */
   if ($('bl_list')) {
+    try { localStorage.setItem('ltBlogSeen', String(Date.now())); } catch (e) { /* optional */ }
     var state = { kind: A.qs('kind'), topic: A.qs('topic'), author: A.qs('author'), q: A.qs('q'), offset: 0 };
     var draw = function (reset) {
       if (reset) { state.offset = 0; $('bl_list').textContent = ''; }
@@ -73,6 +74,28 @@
     $('bl_kind').onchange = function () { state.kind = this.value; sync(); };
     $('bl_topic').onchange = function () { state.topic = this.value; sync(); };
     $('bl_search').onsubmit = function (e) { e.preventDefault(); state.q = $('bl_q').value.trim().slice(0, 100); sync(); };
+    // find an author: suggestions come from aliases that already appear as a byline on a public post
+    var whoTimer = null;
+    $('bl_who').addEventListener('input', function () {
+      var v = this.value.replace(/[^A-Za-z0-9]/g, ''); clearTimeout(whoTimer); $('bl_who_msg').textContent = '';
+      if (v.length < 2) { $('bl_who_list').textContent = ''; return; }
+      whoTimer = setTimeout(function () {
+        readRpc('blog_public_authors', { p_prefix: v }).then(function (r) {
+          var box = $('bl_who_list'); box.textContent = '';
+          (r.ok && Array.isArray(r.body) ? r.body : []).forEach(function (a) { box.appendChild(el('option', { value: a })); });
+        });
+      }, 250);
+    });
+    $('bl_find').onsubmit = function (e) {
+      e.preventDefault(); var v = $('bl_who').value.trim().replace(/[^A-Za-z0-9]/g, '').slice(0, 30);
+      if (v.length < 2) { $('bl_who_msg').textContent = 'Type at least two letters of an alias.'; return; }
+      readRpc('blog_public_authors', { p_prefix: v }).then(function (r) {
+        var list = r.ok && Array.isArray(r.body) ? r.body : [];
+        var exact = list.filter(function (a) { return a.toLowerCase() === v.toLowerCase(); })[0] || (list.length === 1 ? list[0] : '');
+        if (!exact) { $('bl_who_msg').textContent = list.length ? 'Pick one of the suggestions: ' + list.join(', ') : 'No author with that alias has a post here.'; return; }
+        state.author = exact; $('bl_who').value = ''; $('bl_who_list').textContent = ''; sync();
+      });
+    };
     $('bl_author_clear').onclick = function () { state.author = ''; sync(); };
     $('bl_more').onclick = function () { draw(false); };
   }
@@ -89,6 +112,8 @@
       if (p && p.open === false) { $('po_msg').textContent = 'The blog is not open yet.'; return; }
       if (!p) { $('po_msg').textContent = 'That post could not be found. It may have been taken down by its author.'; return; }
       $('po_msg').textContent = ''; $('po_msg').hidden = true;
+      // one rough page-load count per post per tab: the post address only, nothing about the reader is sent or kept
+      try { var vk = 'ltview:' + slug; if (!sessionStorage.getItem(vk)) { sessionStorage.setItem(vk, '1'); readRpc('blog_view', { p_slug: slug }); } } catch (e) { /* counting is optional */ }
       document.title = p.title + ' | Lineage Tracker';
       var md = document.querySelector('meta[name=description]'); if (md) md.setAttribute('content', B.plainText(p.body).slice(0, 155));
       var art = $('po_post'); art.textContent = '';
@@ -112,9 +137,50 @@
         A.rpc('member_blog_like', { p_post: p.id, p_on: !p.liked }).then(function (x) {
           likeBtn.disabled = false;
           if (!x.ok) { $('po_bar_msg').textContent = x.status === 401 ? 'Please sign in to like posts.' : A.say('server'); return; }
-          p.liked = x.body.liked; likes = x.body.likes; showLikes(p.liked);
+          p.liked = x.body.liked; likes = x.body.likes; showLikes(p.liked); loadReact();
         });
       };
+      // reactions and thanks: counts for everyone, choices for signed-in members, no free text
+      var KINDS_R = [['helpful', 'Helpful'], ['grew', 'I grew this too'], ['photo', 'Great photo']];
+      var THANKS = ['Thanks for sharing', 'This helped me', 'I\'ll try this', 'Lovely photos'];
+      var rs = null;
+      function renderReact() {
+        var row = $('po_react_row'), trow = $('po_thanks_row'); row.textContent = ''; trow.textContent = '';
+        if (!rs) return; $('po_react').hidden = false;
+        var signed = !(p.liked === null || p.liked === undefined);
+        KINDS_R.forEach(function (k) {
+          var n = rs[k[0]] || 0, on = rs.mine === k[0];
+          var b = el('button', { 'class': 'btn', type: 'button', 'aria-pressed': on ? 'true' : 'false', text: k[1] + (n ? ' · ' + n : '') });
+          b.addEventListener('click', function () { send(on ? '' : k[0]); });
+          row.appendChild(b);
+        });
+        var tn = rs.thanks || 0, tb = el('button', { 'class': 'btn', type: 'button', 'aria-expanded': trow.hidden ? 'false' : 'true', text: (rs.my_thanks ? 'Thanked' : 'Say thanks') + (tn ? ' · ' + tn : '') });
+        tb.addEventListener('click', function () { if (!signed) { location.href = 'signin.html?next=blog.html'; return; } if (p.mine) { $('po_react_note').textContent = 'You cannot react to your own post.'; return; } trow.hidden = !trow.hidden; tb.setAttribute('aria-expanded', trow.hidden ? 'false' : 'true'); });
+        row.appendChild(tb);
+        THANKS.forEach(function (t, i) {
+          var on = rs.my_thanks === i + 1;
+          var b = el('button', { 'class': 'btn', type: 'button', 'aria-pressed': on ? 'true' : 'false', text: t });
+          b.addEventListener('click', function () { thank(on ? null : i + 1); });
+          trow.appendChild(b);
+        });
+        $('po_react_note').textContent = signed && !p.mine ? 'The author can see your alias when you react or say thanks.' : (signed ? '' : 'Sign in to react or say thanks.');
+      }
+      function loadReact() { readRpc('blog_react_summary', { p_slug: p.slug }).then(function (r) { rs = r.ok ? r.body : null; renderReact(); }); }
+      function send(kind) {
+        if (p.liked === null || p.liked === undefined) { location.href = 'signin.html?next=blog.html'; return; }
+        if (p.mine) { $('po_react_note').textContent = 'You cannot react to your own post.'; return; }
+        A.rpc('member_blog_react', { p_post: p.id, p_kind: kind }).then(function (x) {
+          if (!x.ok) { $('po_react_note').textContent = x.status === 401 ? 'Please sign in to react.' : A.say('server'); return; }
+          p.liked = x.body.mine === 'like'; likes = x.body.like; showLikes(p.liked); rs = Object.assign(rs || {}, x.body); renderReact();
+        });
+      }
+      function thank(line) {
+        A.rpc('member_blog_thank', { p_post: p.id, p_line: line }).then(function (x) {
+          if (!x.ok) { $('po_react_note').textContent = x.status === 401 ? 'Please sign in to say thanks.' : A.say('server'); return; }
+          rs = Object.assign(rs || {}, x.body); renderReact();
+        });
+      }
+      loadReact();
       $('po_share').onclick = function () {
         var base = location.origin + location.pathname + '?p=' + encodeURIComponent(p.slug);
         var go = function (url) {

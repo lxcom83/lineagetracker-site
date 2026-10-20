@@ -11,6 +11,12 @@
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (j) {
       if (!j || j.open === false || !j.rows || !j.rows.length) { say('Member stories are coming soon. Have something to share? You can write the first one.'); return; }
+      // a small "New" dot on the Blog menu link when the newest post is newer than your last visit to the blog.
+      // The "last seen" time lives only in this browser; nothing is sent anywhere.
+      try {
+        var seen = +localStorage.getItem('ltBlogSeen') || 0, newest = new Date(j.rows[0].published_at).getTime();
+        if (newest > seen) { document.querySelectorAll('nav a[href="blog.html"]').forEach(function (a) { if (a.querySelector('.nb')) return; var b = document.createElement('span'); b.className = 'nb'; b.textContent = 'New'; b.style.cssText = 'margin-left:4px;padding:1px 6px;border-radius:9px;background:var(--copper,#b8693d);color:#fff;font-size:.7em;font-weight:700;vertical-align:middle'; b.setAttribute('aria-label', '(new posts)'); a.appendChild(b); }); }
+      } catch (e) { /* the dot is optional */ }
       list.textContent = '';
       j.rows.forEach(function (p) {
         var d = document.createElement('p'), a = document.createElement('a'), s = document.createElement('span');

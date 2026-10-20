@@ -113,6 +113,76 @@ window.LTBlocks = (function () {
     return d;
   }
 
+
+  /* ---------- pasting a whole article: plain text (with simple markdown marks) becomes blocks ---------- */
+  function inlineRuns(t) {
+    var out = [], re = /\*\*([^*]+)\*\*|\*([^*\s][^*]*)\*|\[([^\]]{1,200})\]\((https?:\/\/[^\s)<>"']{3,490})\)/g, last = 0, m;
+    while ((m = re.exec(t))) {
+      if (m.index > last) out.push({ text: t.slice(last, m.index) });
+      if (m[1] !== undefined) out.push({ text: m[1], b: true }); else if (m[2] !== undefined) out.push({ text: m[2], i: true }); else out.push({ text: m[3], href: m[4] });
+      last = re.lastIndex;
+    }
+    if (last < t.length) out.push({ text: t.slice(last) });
+    return out.filter(function (r) { return r.text; });
+  }
+  function splitLong(t, max) {
+    var parts = [];
+    while (t.length > max) {
+      var cut = Math.max(t.lastIndexOf('. ', max - 1), t.lastIndexOf('\n', max - 1)); if (cut < max * 0.5) cut = t.lastIndexOf(' ', max - 1); if (cut < 1) cut = max - 1;
+      parts.push(t.slice(0, cut + 1).trim()); t = t.slice(cut + 1).trim();
+    }
+    if (t) parts.push(t); return parts;
+  }
+  function fromText(text) {
+    var blocks = [], paras = String(text || '').replace(/\r/g, '').replace(/ /g, ' ').split(/\n\s*\n/);
+    paras.forEach(function (para) {
+      var lines = para.split('\n').map(function (l) { return l.replace(/\s+$/, ''); }).filter(function (l) { return l.trim(); });
+      if (!lines.length) return;
+      var first = lines[0].trim();
+      if (lines.length === 1 && /^-{3,}$|^\*{3,}$|^_{3,}$/.test(first)) { blocks.push({ t: 'hr' }); return; }
+      if (lines.length === 1 && YT_RE.test(first)) { blocks.push({ t: 'video', url: first, caption: '' }); return; }
+      var hm = /^#{1,6}\s+(.+)$/.exec(first);
+      if (hm && lines.length === 1) { blocks.push({ t: 'h', text: hm[1].replace(/\*+/g, '').trim().slice(0, LIMITS.h) }); return; }
+      if (lines.every(function (l) { return /^\s*(?:[-*•]\s+)/.test(l); })) { blocks.push({ t: 'ul', items: lines.slice(0, LIMITS.items).map(function (l) { return inlineRuns(l.replace(/^\s*[-*•]\s+/, '').slice(0, LIMITS.li)); }) }); return; }
+      if (lines.every(function (l) { return /^\s*\d{1,3}[.)]\s+/.test(l); })) { blocks.push({ t: 'ol', items: lines.slice(0, LIMITS.items).map(function (l) { return inlineRuns(l.replace(/^\s*\d{1,3}[.)]\s+/, '').slice(0, LIMITS.li)); }) }); return; }
+      if (lines.every(function (l) { return /^\s*>\s?/.test(l); })) { var q = lines.map(function (l) { return l.replace(/^\s*>\s?/, ''); }).join(' ').slice(0, LIMITS.quote); blocks.push({ t: 'quote', runs: inlineRuns(q), cite: '' }); return; }
+      var body = lines.join(' ').replace(/\s{2,}/g, ' ').trim();
+      splitLong(body, LIMITS.p).forEach(function (c) { blocks.push({ t: 'p', runs: inlineRuns(c) }); });
+    });
+    return blocks.slice(0, LIMITS.blocks);
+  }
+
+  /* ---------- copying a post out as clean HTML (staff "Copy for Substack"): text only, photos become numbered placeholders ---------- */
+  function esc(t) { return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function runsHTML(runs) {
+    return (runs || []).map(function (r) {
+      if (!r || typeof r.text !== 'string') return '';
+      var h = esc(r.text); if (r.b) h = '<strong>' + h + '</strong>'; if (r.i) h = '<em>' + h + '</em>';
+      if (r.href && LINK_RE.test(r.href)) h = '<a href="' + esc(r.href) + '">' + h + '</a>';
+      return h;
+    }).join('');
+  }
+  /* opts.image(id) -> {url}. Returns { html, text, photos:[{n, url, caption}] } */
+  function toHTML(blocks, opts) {
+    opts = opts || {}; var img = opts.image || function () { return null; }, out = [], txt = [], photos = [];
+    var ph = function (id, cap) { var n = photos.length + 1, i = img(id) || {}; photos.push({ n: n, url: i.url || '', caption: cap || '' }); var t = '[Photo ' + n + (cap ? ': ' + cap : '') + ']'; out.push('<p><em>' + esc(t) + '</em></p>'); txt.push(t); };
+    var flat = function (runs) { return (runs || []).map(function (r) { return r && r.text || ''; }).join(''); };
+    (Array.isArray(blocks) ? blocks : []).forEach(function (b) {
+      if (!b || typeof b !== 'object') return;
+      switch (b.t) {
+        case 'h': out.push('<h2>' + esc(b.text) + '</h2>'); txt.push('\n' + b.text); break;
+        case 'p': out.push('<p>' + runsHTML(b.runs) + '</p>'); txt.push(flat(b.runs)); break;
+        case 'quote': out.push('<blockquote><p>' + runsHTML(b.runs) + '</p>' + (b.cite ? '<p>' + esc(b.cite) + '</p>' : '') + '</blockquote>'); txt.push('> ' + flat(b.runs) + (b.cite ? ' (' + b.cite + ')' : '')); break;
+        case 'ul': case 'ol': out.push('<' + b.t + '>' + (b.items || []).map(function (it) { return '<li>' + runsHTML(it) + '</li>'; }).join('') + '</' + b.t + '>'); txt.push((b.items || []).map(function (it, k) { return (b.t === 'ol' ? (k + 1) + '. ' : '- ') + flat(it); }).join('\n')); break;
+        case 'img': ph(b.image, b.caption); break;
+        case 'gallery': (b.images || []).forEach(function (x) { ph(x.image, x.caption); }); break;
+        case 'hr': out.push('<hr>'); txt.push('---'); break;
+        case 'video': { var id = b.id || ((YT_RE.exec(b.url || '') || [])[1]); if (!id) break; var u = 'https://youtu.be/' + id; out.push('<p><a href="' + u + '">' + u + '</a></p>'); txt.push(u); break; }
+      }
+    });
+    return { html: out.join('\n'), text: txt.join('\n\n'), photos: photos };
+  }
+
   /* ---------- the editor ---------- */
   var KINDS = [
     ['p', 'Text', '¶'], ['h', 'Heading', 'H'], ['img', 'Photo', '▣'], ['gallery', '2 to 4 photos', '▦'], ['ul', 'List', '•'],
@@ -322,8 +392,13 @@ window.LTBlocks = (function () {
         handle.addEventListener('pointermove', onMove); handle.addEventListener('pointerup', onUp); handle.addEventListener('pointercancel', onUp);
       });
     }
+    function append(blocks) {
+      var room = LIMITS.blocks - items.length, add = (Array.isArray(blocks) ? blocks : []).slice(0, Math.max(0, room));
+      add.forEach(function (b) { items.push({ key: uid(), b: JSON.parse(JSON.stringify(b)) }); });
+      draw(); changed(); return { added: add.length, dropped: (Array.isArray(blocks) ? blocks.length : 0) - add.length };
+    }
     set(opts.blocks || []);
-    return { get: get, set: set, addImage: function (r) { images[r.id] = r; }, images: function () { return images; } };
+    return { get: get, set: set, append: append, addImage: function (r) { images[r.id] = r; }, images: function () { return images; } };
   }
 
   /* ---------- photos: shrink and re-encode in the browser (this also removes location and camera data) ---------- */
@@ -359,5 +434,5 @@ window.LTBlocks = (function () {
   function blobToBase64(blob) {
     return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(String(r.result).split(',')[1]); }; r.onerror = rej; r.readAsDataURL(blob); });
   }
-  return { render: render, editor: editor, plainText: plainText, preparePhoto: preparePhoto, blobToBase64: blobToBase64, domToRuns: domToRuns, YT_RE: YT_RE, LINK_RE: LINK_RE };
+  return { render: render, editor: editor, fromText: fromText, toHTML: toHTML, plainText: plainText, preparePhoto: preparePhoto, blobToBase64: blobToBase64, domToRuns: domToRuns, YT_RE: YT_RE, LINK_RE: LINK_RE };
 })();

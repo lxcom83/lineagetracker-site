@@ -22,8 +22,8 @@
     stamp(); clearTimeout(t); t = setTimeout(out, LIMIT);
     return false;
   })();
-  var ACTIONS = ['member_created', 'member_created_invited', 'member_confirmed', 'password_reset', 'password_changed', 'account_deleted', 'terms_accepted', 'member_viewed', 'member_suspended', 'member_unsuspended', 'member_search_email', 'role_changed', 'alias_changed', 'flag_set', 'invite_created', 'member_deleted_by_staff', 'mail_cap_reached', 'blog_submitted', 'blog_viewed', 'blog_approved', 'blog_changes_asked', 'blog_rejected', 'blog_unpublished', 'blog_withdrawn', 'blog_deleted', 'blog_kind_set'];
-  var ERR = { not_staff: 'This account is not staff.', not_allowed: 'Your role does not allow that.', not_yourself: 'You cannot do that to your own account.', not_found: 'That member no longer exists.', remove_role_first: 'Remove the staff role first.', suspend_admin_first_remove_role: 'Remove the administrator role first.', not_active: 'The member must be active.', pending_member: 'The member has not confirmed their email yet.', alias_taken: 'That alias is taken.', sql_only: 'This switch can only be changed in the database, on purpose.', signup_closed: 'Sign-up is closed. Open it in Switches first, or invitations lead nowhere.', auth_update_failed: 'The database change was made, but the sign-in service did not answer. Press the same button again.', slow_down: 'Too many requests. Wait a moment.', network: 'We could not reach the server.', server: 'Something went wrong on the server.', mfa_required: 'Two-step sign-in is required for staff.', mfa_not_enrolled: 'That person has not set up two-step sign-in yet. Ask them to set it up on their own account page first, then give the role.', bad_audience: 'That group is not available.', not_waiting: 'That post is no longer waiting for review (the author may have changed or withdrawn it).', bad_reason: 'Choose a reason from the list.' };
+  var ACTIONS = ['member_created', 'member_created_invited', 'member_confirmed', 'password_reset', 'password_changed', 'account_deleted', 'terms_accepted', 'member_viewed', 'member_suspended', 'member_unsuspended', 'member_search_email', 'role_changed', 'alias_changed', 'flag_set', 'invite_created', 'member_deleted_by_staff', 'mail_cap_reached', 'blog_submitted', 'blog_viewed', 'blog_approved', 'blog_changes_asked', 'blog_rejected', 'blog_unpublished', 'blog_withdrawn', 'blog_deleted', 'blog_kind_set', 'partner_submitted', 'partner_resubmitted', 'partner_withdrawn', 'partner_renewed', 'partner_approved', 'partner_changes_asked', 'partner_rejected', 'partner_disabled', 'partner_enabled', 'partner_flags_set', 'partner_resigned'];
+  var ERR = { bad_date: 'That date is not allowed. Pick a day within the next four months.', not_scheduled: 'That post has already appeared, so it cannot be moved.', not_approved: 'That version is not live.', not_disabled: 'That version is not switched off.', expired: 'That link has expired. Use Sign it again once it is live, or ask the owner to renew.', not_waiting: 'That one is no longer waiting.', bad_reason: 'Choose a reason first.', not_staff: 'This account is not staff.', not_allowed: 'Your role does not allow that.', not_yourself: 'You cannot do that to your own account.', not_found: 'That member no longer exists.', remove_role_first: 'Remove the staff role first.', suspend_admin_first_remove_role: 'Remove the administrator role first.', not_active: 'The member must be active.', pending_member: 'The member has not confirmed their email yet.', alias_taken: 'That alias is taken.', sql_only: 'This switch can only be changed in the database, on purpose.', signup_closed: 'Sign-up is closed. Open it in Switches first, or invitations lead nowhere.', auth_update_failed: 'The database change was made, but the sign-in service did not answer. Press the same button again.', slow_down: 'Too many requests. Wait a moment.', network: 'We could not reach the server.', server: 'Something went wrong on the server.', mfa_required: 'Two-step sign-in is required for staff.', mfa_not_enrolled: 'That person has not set up two-step sign-in yet. Ask them to set it up on their own account page first, then give the role.', bad_audience: 'That group is not available.', not_waiting: 'That post is no longer waiting for review (the author may have changed or withdrawn it).', bad_reason: 'Choose a reason from the list.' };
   var call = function (action, extra) { return A.fnAuthed('admin', Object.assign({ action: action }, extra || {})).then(function (r) { var j = r.body || {}; if (r.status === 401) { location.replace('signin.html?next=staff.html'); } return j.ok ? j : { ok: false, error: j.error || (r.status === 0 ? 'network' : 'server') }; }); };
   var errText = function (j) { return ERR[j.error] || 'Something went wrong (' + j.error + ').'; };
   var fmt = function (t) { try { return new Date(t).toLocaleString(); } catch (e) { return String(t); } };
@@ -32,10 +32,10 @@
     var tb = el('tbody'); rows.forEach(function (r) { var x = el('tr'); r.forEach(function (c) { x.appendChild(el('td', {}, [typeof c === 'string' ? document.createTextNode(c) : c])); }); tb.appendChild(x); }); t.appendChild(tb);
     return el('div', { 'class': 'tblwrap' }, [t]);
   }
-  var TABS = ['overview', 'members', 'blog', 'invites', 'audit', 'settings', 'health'];
+  var TABS = ['overview', 'members', 'blog', 'partners', 'invites', 'audit', 'settings', 'health'];
   function show(name) {
     TABS.forEach(function (n) { $('st_p_' + n).hidden = n !== name; $('st_t_' + n).setAttribute('aria-selected', n === name ? 'true' : 'false'); });
-    if (name === 'overview') loadStats(); if (name === 'members') loadMembers(0); if (name === 'settings') loadFlags(); if (name === 'audit') loadAudit(0); if (name === 'health') loadHealth(); if (name === 'blog') loadBlog();
+    if (name === 'overview') { loadAttention(); loadStats(); } if (name === 'members') loadMembers(0); if (name === 'settings') loadFlags(); if (name === 'audit') loadAudit(0); if (name === 'health') loadHealth(); if (name === 'partners') loadPartners(); if (name === 'blog') loadBlog();
   }
   // an idle tab is on its way to the sign-in page: do not start anything else (it would race to a different page)
   if (!idleOut) A.requireSignIn('staff.html').then(function (w) {
@@ -49,6 +49,30 @@
       show('overview');
     });
   });
+  // overview: what is waiting for a person, and what is coming up (counts and dates only)
+  function ago(t) { var d = Math.floor((Date.now() - new Date(t).getTime()) / 86400000); return d <= 0 ? 'today' : d === 1 ? '1 day' : d + ' days'; }
+  function dayOf(t) { try { return new Date(t).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }); } catch (e) { return ''; } }
+  function loadAttention() {
+    var box = $('st_attention'); box.textContent = 'Loading…';
+    call('attention').then(function (j) {
+      box.textContent = ''; if (!j.ok) { box.textContent = errText(j); return; }
+      var a = j.attention || {}, ul = el('ul', { 'class': 'list att' });
+      function item(text, tab, warn) {
+        var b = el('button', { type: 'button', 'class': 'linkish', text: text }); b.addEventListener('click', function () { show(tab); });
+        ul.appendChild(el('li', { 'class': warn ? 'warn' : '' }, [b]));
+      }
+      if (a.blog_waiting) item(a.blog_waiting + ' blog post' + (a.blog_waiting === 1 ? '' : 's') + ' waiting for review (oldest ' + ago(a.blog_oldest) + ')', 'blog', (Date.now() - new Date(a.blog_oldest).getTime()) > 3 * 86400000);
+      if (a.partners_waiting) item(a.partners_waiting + ' partner version' + (a.partners_waiting === 1 ? '' : 's') + ' waiting for review (oldest ' + ago(a.partners_oldest) + ')', 'partners', (Date.now() - new Date(a.partners_oldest).getTime()) > 3 * 86400000);
+      if (a.partners_expired) item(a.partners_expired + ' partner link' + (a.partners_expired === 1 ? ' has' : 's have') + ' expired. The link goes back to plain Lineage Tracker until it is signed again.', 'partners', true);
+      if (a.partners_expiring) item(a.partners_expiring + ' partner link' + (a.partners_expiring === 1 ? '' : 's') + ' will expire within 30 days', 'partners', false);
+      if (a.blog_scheduled) item('Next scheduled post appears ' + dayOf(a.blog_next_at) + ' (' + a.blog_scheduled + ' scheduled)', 'blog', false);
+      else if (a.blog_live && a.blog_public_on) item('Nothing is scheduled. The last post went up ' + dayOf(a.blog_last_at) + '.', 'blog', false);
+      if (!a.blog_write_on && (a.blog_live || a.blog_waiting)) item('Blog writing is switched off (members cannot send posts)', 'settings', false);
+      if (!a.blog_public_on && (a.blog_live || a.blog_scheduled)) item('Blog reading is switched off (nobody can read posts)', 'settings', true);
+      if (!ul.children.length) { box.appendChild(el('p', { 'class': 'muted', text: 'Nothing needs attention.' })); return; }
+      box.appendChild(ul);
+    });
+  }
   // overview
   function loadStats() {
     var box = $('st_stats'); box.textContent = 'Loading…';
@@ -125,7 +149,7 @@
         var flags = screenText(p.screen); return [fmt(p.submitted_at), (p.live ? '(update) ' : '') + (p.title || 'Untitled'), p.author_alias + ' (' + (A.LEVELS[p.author_level] || p.author_level) + ')', flags === 'Nothing flagged.' ? '' : flags, b];
       })));
     });
-    loadLive(0);
+    loadScheduled(); loadLive(0);
     if (role === 'admin') loadKinds();
   }
   function openPost(id) {
@@ -142,8 +166,10 @@
       d.appendChild(art);
       var msg = el('p', { 'class': 'err', role: 'alert' }), acts = el('div', { 'class': 'actions' });
       if (p.status === 'submitted') {
+        var when = el('input', { type: 'date', 'aria-label': 'Publish on', value: p.wanted_date ? String(p.wanted_date).slice(0, 10) : '' });
+        if (!p.live) d.appendChild(el('p', { 'class': 'small' }, [document.createTextNode((p.wanted_date ? 'The author asked for ' + String(p.wanted_date).slice(0, 10) + '. ' : '') + 'Publish on (empty means now): '), when]));
         var ap = el('button', { type: 'button', 'class': 'btn primary', text: p.live ? 'Approve the update' : 'Approve and publish' });
-        ap.addEventListener('click', function () { msg.textContent = ''; ap.disabled = true; call('blog_decide', { id: p.id, decision: 'approve' }).then(function (r) { ap.disabled = false; if (!r.ok) { msg.textContent = errText(r); return; } d.textContent = 'Published.'; loadBlog(); }); });
+        ap.addEventListener('click', function () { msg.textContent = ''; ap.disabled = true; call('blog_decide', { id: p.id, decision: 'approve', publish_at: atDate(when.value) }).then(function (r) { ap.disabled = false; if (!r.ok) { msg.textContent = errText(r); return; } d.textContent = 'Published.'; loadBlog(); }); });
         acts.appendChild(ap);
         var rs = reasonPicker(), note = el('textarea', { rows: 2, maxlength: 1000, placeholder: 'Note to the author (optional, they will see it)', 'aria-label': 'Note to the author' });
         var ch = el('button', { type: 'button', 'class': 'btn', text: 'Ask for changes' }), rj = el('button', { type: 'button', 'class': 'btn danger', text: 'Reject' });
@@ -153,6 +179,15 @@
         }); });
         d.appendChild(acts); d.appendChild(el('div', { 'class': 'actions' }, [rs, ch, rj])); d.appendChild(note);
       } else d.appendChild(el('p', { 'class': 'muted', text: 'This post is not waiting for review (status: ' + p.status + (p.live ? ', published' : '') + ').' }));
+      if (p.live && !p.scheduled) {
+        var rbox = el('p', { 'class': 'small muted', text: 'Loading reactions…' }); d.appendChild(rbox);
+        call('blog_reactors', { id: p.id }).then(function (r) {
+          if (!r.ok) { rbox.textContent = ''; return; }
+          rbox.textContent = r.like + ' likes · ' + r.helpful + ' helpful · ' + r.grew + ' grew it too · ' + r.photo + ' great photo · ' + r.thanks + ' thanks' + ((r.who || []).length ? '. Reacted: ' + r.who.slice(0, 20).map(function (w) { return w.alias + ' (' + w.kind + ')'; }).join(', ') + (r.who.length > 20 ? ' …' : '') : '.');
+        });
+      }
+      if (p.live && !p.scheduled && p.slug) d.appendChild(substackBox(p, imgs));
+      if (p.live && p.scheduled) d.appendChild(el('p', { 'class': 'notice' }, [document.createTextNode('Scheduled: appears on ' + fmt(p.published_at) + '. Move or cancel it from the Scheduled list above.')]));
       if (p.live) {
         var urs = reasonPicker(), un = el('button', { type: 'button', 'class': 'btn danger', text: 'Take the published post down' });
         un.addEventListener('click', function () { msg.textContent = ''; if (!urs.value) { msg.textContent = 'Choose a reason first.'; return; } if (!confirm('Take this post off the blog now?')) return; call('blog_unpublish', { id: p.id, reason: urs.value }).then(function (r) { if (!r.ok) { msg.textContent = errText(r); return; } d.textContent = 'Taken down.'; loadBlog(); }); });
@@ -162,14 +197,62 @@
       d.appendChild(msg);
     });
   }
+  // "Copy for Substack": only for the signed-in staff member's OWN published posts. Member posts are never copied out.
+  function myId() { try { var t = A.getSession().access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'); return JSON.parse(atob(t + '==='.slice((t.length + 3) % 4))).sub || ''; } catch (e) { return ''; } }
+  function substackBox(p, imgs) {
+    var box = el('div', { 'class': 'wr-set' });
+    if (!p.author_id || p.author_id !== myId()) { box.appendChild(el('p', { 'class': 'small muted', text: 'Copy for Substack is only for posts you wrote yourself. Member posts are never copied out.' })); return box; }
+    var post = location.origin + '/post.html?p=' + encodeURIComponent(p.slug);
+    var r = window.LTBlocks.toHTML(p.body, { image: function (iid) { return imgs[iid] || null; } });
+    var closing = 'First published on Lineage Tracker: ' + post + '\nTrack your own breeding for free: https://app.lineagetracker.org/';
+    var html = '<h1>' + (p.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</h1>\n' + r.html + '\n<hr>\n<p>First published on Lineage Tracker: <a href="' + post + '">' + post + '</a></p>\n<p>Track your own breeding for free: <a href="https://app.lineagetracker.org/">app.lineagetracker.org</a></p>';
+    var text = (p.title || '') + '\n\n' + r.text + '\n\n---\n' + closing;
+    var say = el('p', { 'class': 'small muted', role: 'status' });
+    var btn = el('button', { type: 'button', 'class': 'btn', text: 'Copy for Substack' });
+    btn.addEventListener('click', function () {
+      var done = function () { say.textContent = 'Copied. In Substack, start a new post and paste. Add the photos where the [Photo] lines are.'; };
+      var fallback = function () { var ta = el('textarea', { rows: 6, readonly: true }); ta.value = text; box.appendChild(ta); ta.select(); say.textContent = 'Press copy on your keyboard, then paste into Substack.'; };
+      try {
+        if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([text], { type: 'text/plain' }) })]).then(done, fallback);
+        else navigator.clipboard.writeText(text).then(done, fallback);
+      } catch (e) { fallback(); }
+    });
+    box.appendChild(el('p', {}, [el('b', { text: 'Share on Substack. ' }), el('span', { 'class': 'small muted', text: 'Copies the whole post as clean text with one closing link back to this post and the app.' })]));
+    box.appendChild(btn); box.appendChild(say);
+    if (r.photos.length) {
+      box.appendChild(el('p', { 'class': 'small', text: 'Photos to save and add yourself (links open the picture; these links stop working after a short while, so save them now):' }));
+      var ul = el('ul', { 'class': 'small' });
+      r.photos.forEach(function (x) { ul.appendChild(el('li', {}, [x.url ? el('a', { href: x.url, target: '_blank', rel: 'noopener', text: 'Photo ' + x.n }) : document.createTextNode('Photo ' + x.n), document.createTextNode(x.caption ? ' (' + x.caption + ')' : '')])); });
+      box.appendChild(ul);
+    }
+    return box;
+  }
+  // a day picked on this page, as a time at 9am in this browser (empty, today or earlier means "now")
+  function atDate(v) { if (!/^\d{4}-\d{2}-\d{2}$/.test(v || '')) return null; var t = new Date(v + 'T09:00:00'); return t.getTime() > Date.now() ? t.toISOString() : null; }
+  function loadScheduled() {
+    var box = $('st_bsched'); box.textContent = '';
+    call('blog_scheduled').then(function (j) {
+      if (!j.ok) { box.textContent = errText(j); return; }
+      $('st_bsched_n').textContent = j.rows.length;
+      if (!j.rows.length) { box.appendChild(el('p', { 'class': 'muted', text: 'Nothing is scheduled.' })); return; }
+      box.appendChild(table(['Appears', 'Title', 'Author', 'Move to', ''], j.rows.map(function (p) {
+        var inp = el('input', { type: 'date', 'aria-label': 'New day', value: String(p.published_at).slice(0, 10) });
+        var b = el('button', { type: 'button', 'class': 'btn', text: 'Move' });
+        b.addEventListener('click', function () { b.disabled = true; call('blog_reschedule', { id: p.id, publish_at: atDate(inp.value) || new Date().toISOString() }).then(function (r) { b.disabled = false; if (!r.ok) { alert(errText(r)); return; } loadBlog(); }); });
+        var o = el('button', { type: 'button', 'class': 'btn', text: 'Open' }); o.addEventListener('click', function () { openPost(p.id); });
+        return [fmt(p.published_at), p.title, p.author_alias, inp, el('span', {}, [b, document.createTextNode(' '), o])];
+      })));
+    });
+  }
   function loadLive(off) {
     var box = $('st_blive'); box.textContent = '';
     call('blog_live', { limit: PAGE, offset: off }).then(function (j) {
       if (!j.ok) { box.textContent = errText(j); return; }
-      if (!j.rows.length) { box.appendChild(el('p', { 'class': 'muted', text: 'Nothing published yet.' })); return; }
-      box.appendChild(table(['Published', 'Title', 'Author', 'Likes', ''], j.rows.map(function (p) {
+      if (!j.rows.length) { $('st_bviews').textContent = ''; box.appendChild(el('p', { 'class': 'muted', text: 'Nothing published yet.' })); return; }
+      $('st_bviews').textContent = 'Page loads: ' + j.views_total + ' in all, ' + j.views7_total + ' in the last 7 days. These are rough counts of page loads (no address, cookie or visitor id is kept), not readers.';
+      box.appendChild(table(['Published', 'Title', 'Author', 'Likes', 'Page loads', 'Last 7 days', ''], j.rows.map(function (p) {
         var b = el('button', { type: 'button', 'class': 'btn', text: 'Open' }); b.addEventListener('click', function () { openPost(p.id); });
-        return [fmt(p.published_at).split(',')[0], (p.pending_edit ? '(update waiting) ' : '') + p.title, p.author_alias, String(p.likes), b];
+        return [fmt(p.published_at).split(',')[0], (p.pending_edit ? '(update waiting) ' : '') + p.title, p.author_alias, String(p.likes), String(p.views), String(p.views7), b];
       })));
       var pg = el('p'); if (off > 0) { var pv = el('button', { type: 'button', 'class': 'btn', text: 'Newer' }); pv.onclick = function () { loadLive(off - PAGE); }; pg.appendChild(pv); }
       if (off + PAGE < j.total) { var nx = el('button', { type: 'button', 'class': 'btn', text: 'Older' }); nx.onclick = function () { loadLive(off + PAGE); }; pg.appendChild(nx); }
@@ -192,6 +275,81 @@
     if (!key) return;
     call('blog_kind_set', { key: key, label: label.slice(0, 40), active: true }).then(function (r) { if (!r.ok) { alert(errText(r)); return; } $('st_bkind_label').value = ''; loadKinds(); });
   });
+  // partner versions
+  var PREASONS = [['impersonation', 'Speaks for an organisation that has not asked for it'], ['selling', 'Reads as an advert'], ['contact_details', 'Contact details in it'], ['offensive', 'Wording not suitable'],
+    ['not_clear', 'Not clear what it is for'], ['logo_problem', 'Logo problem'], ['link_problem', 'A web address does not work'], ['misuse', 'Reported or misused'], ['other', 'Other (say why in the note)']];
+  function preasonPicker() { return el('select', { 'aria-label': 'Reason' }, [el('option', { value: '', text: 'Choose a reason' })].concat(PREASONS.map(function (r) { return el('option', { value: r[0], text: r[1] }); }))); }
+  var PSTATUS = { approved: 'Live', disabled: 'Switched off', rejected: 'Rejected', changes: 'Changes asked for', withdrawn: 'Withdrawn', pending: 'Waiting' };
+  function varietyNames(L) {
+    if (!L || !window.DecompressionStream) return Promise.resolve(null);
+    try {
+      var b = L.replace(/-/g, '+').replace(/_/g, '/'); while (b.length % 4) b += '=';
+      var bin = atob(b), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+      return new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate'))).text().then(function (t) { return JSON.parse(t).varieties || []; }).catch(function () { return null; });
+    } catch (e) { return Promise.resolve(null); }
+  }
+  function loadPartners() {
+    var box = $('st_pqueue'); box.textContent = 'Loading…'; $('st_ppost').hidden = true;
+    call('partner_queue').then(function (j) {
+      box.textContent = ''; if (!j.ok) { box.textContent = errText(j); return; }
+      if (!j.items.length) box.appendChild(el('p', { 'class': 'muted', text: 'Nothing is waiting for review.' }));
+      else box.appendChild(table(['Waiting since', 'Name', 'Member', ''], j.items.map(function (p) {
+        var b = el('button', { type: 'button', 'class': 'btn primary', text: 'Review' }); b.addEventListener('click', function () { openPartner(p.id); });
+        return [fmt(p.created_at), p.name, p.owner || '(deleted)', b];
+      })));
+    });
+    var lb = $('st_plist'); lb.textContent = '';
+    call('partner_list', { limit: 50, offset: 0 }).then(function (j) {
+      if (!j.ok) { lb.textContent = errText(j); return; }
+      if (!j.items.length) { lb.appendChild(el('p', { 'class': 'muted', text: 'Nothing decided yet.' })); return; }
+      lb.appendChild(table(['Updated', 'Name', 'Member', 'Status', 'Expires', ''], j.items.map(function (p) {
+        var b = el('button', { type: 'button', 'class': 'btn', text: 'Open' }); b.addEventListener('click', function () { openPartner(p.id); });
+        return [fmt(p.updated_at), p.name || '(emptied)', p.owner || '(deleted)', PSTATUS[p.status] || p.status, p.exp ? fmt(p.exp).split(',')[0] : '', b];
+      })));
+    });
+  }
+  function openPartner(id) {
+    var d = $('st_ppost'); d.hidden = false; d.textContent = 'Loading…'; d.scrollIntoView();
+    call('partner_get', { id: id }).then(function (j) {
+      d.textContent = ''; if (!j.ok) { d.textContent = errText(j); return; }
+      var p = j.partner, c = {}; try { c = JSON.parse(p.cfg); } catch (e) { /* shown as empty */ }
+      d.appendChild(el('p', { 'class': 'small muted', text: 'Made by ' + (p.owner || '(deleted member)') + ' on ' + fmt(p.created_at) + '. Status: ' + (PSTATUS[p.status] || p.status) + (p.exp ? ', expires ' + fmt(p.exp).split(',')[0] : '') + (p.flags ? ', flags: ' + p.flags : '') + '.' }));
+      var rows = [['Name', c.n], ['Organisation', c.o], ['Welcome message', c.w], ['Website', c.u], ['Logo address', c.l], ['Variety list address', c.c], ['For', c.k], ['Most detailed mode', c.m], ['Hidden features', (c.h || []).join(', ')], ['Colours', (c.p || '(default)') + ' and ' + (c.a || '(default)')]];
+      d.appendChild(table(['Field', 'What it says'], rows.map(function (r) { return [r[0], r[1] || '(none)']; })));
+      if (c.l) d.appendChild(el('p', { 'class': 'small muted' }, [document.createTextNode('The staff page never loads pictures from other websites. To look at the logo, open it in its own tab: '), el('a', { href: c.l, target: '_blank', rel: 'noopener noreferrer', text: 'open the logo' }), document.createTextNode('.')]));
+      if (c.L) {
+        var vl = el('p', { 'class': 'small', text: 'A variety list is packed into the link. Reading it…' }); d.appendChild(vl);
+        varietyNames(c.L).then(function (list) {
+          if (!list) { vl.textContent = 'A variety list is packed into the link, but it could not be read here. Do not approve until it can be.'; return; }
+          vl.textContent = list.length + ' varieties in the list. First ' + Math.min(40, list.length) + ': ' + list.slice(0, 40).map(function (x) { return String(x.name || '') + (x.description ? ' (' + String(x.description).slice(0, 80) + ')' : ''); }).join('; ');
+        });
+      }
+      var msg = el('p', { 'class': 'err', role: 'alert' }), acts = el('div', { 'class': 'actions' });
+      if (p.status === 'pending') {
+        var ap = el('button', { type: 'button', 'class': 'btn primary', text: 'Approve and sign the link' });
+        ap.addEventListener('click', function () { msg.textContent = ''; ap.disabled = true; call('partner_decide', { id: p.id, decision: 'approve' }).then(function (r) { ap.disabled = false; if (!r.ok) { msg.textContent = errText(r); return; } d.textContent = 'Approved. The owner has been emailed.'; loadPartners(); }); });
+        acts.appendChild(ap);
+        var rs = preasonPicker(), note = el('textarea', { rows: 2, maxlength: 1000, placeholder: 'Note to the owner (optional, they will see it)', 'aria-label': 'Note to the owner' });
+        var ch = el('button', { type: 'button', 'class': 'btn', text: 'Ask for changes' }), rj = el('button', { type: 'button', 'class': 'btn danger', text: 'Reject' });
+        [[ch, 'changes'], [rj, 'reject']].forEach(function (x) { x[0].addEventListener('click', function () {
+          msg.textContent = ''; if (!rs.value) { msg.textContent = 'Choose a reason first.'; return; }
+          call('partner_decide', { id: p.id, decision: x[1], reason: rs.value, note: note.value }).then(function (r) { if (!r.ok) { msg.textContent = errText(r); return; } d.textContent = x[1] === 'changes' ? 'Sent back to the owner.' : 'Rejected.'; loadPartners(); });
+        }); });
+        d.appendChild(acts); d.appendChild(el('div', { 'class': 'actions' }, [rs, ch, rj])); d.appendChild(note);
+      } else if (p.status === 'approved') {
+        var urs = preasonPicker(), un = el('button', { type: 'button', 'class': 'btn danger', text: 'Switch this version off' });
+        un.addEventListener('click', function () { msg.textContent = ''; if (!urs.value) { msg.textContent = 'Choose a reason first.'; return; } if (!confirm('Switch this version off? Devices go back to plain Lineage Tracker the next time they check.')) return; call('partner_status', { id: p.id, status: 'disabled', reason: urs.value }).then(function (r) { if (!r.ok) { msg.textContent = errText(r); return; } d.textContent = 'Switched off.'; loadPartners(); }); });
+        var rg = el('button', { type: 'button', 'class': 'btn', text: 'Sign it again (new 12 months)' });
+        rg.addEventListener('click', function () { msg.textContent = ''; call('partner_resign', { id: p.id }).then(function (r) { msg.textContent = r.ok ? 'Signed again. The owner finds the new link on their page.' : errText(r); }); });
+        d.appendChild(el('div', { 'class': 'actions' }, [urs, un, rg]));
+      } else if (p.status === 'disabled') {
+        var on = el('button', { type: 'button', 'class': 'btn primary', text: 'Switch it back on' });
+        on.addEventListener('click', function () { msg.textContent = ''; call('partner_status', { id: p.id, status: 'approved' }).then(function (r) { if (!r.ok) { msg.textContent = errText(r); return; } d.textContent = 'Switched back on.'; loadPartners(); }); });
+        d.appendChild(el('div', { 'class': 'actions' }, [on]));
+      } else d.appendChild(el('p', { 'class': 'muted', text: 'Nothing to do with this one (status: ' + (PSTATUS[p.status] || p.status) + ').' }));
+      d.appendChild(msg);
+    });
+  }
   // invitations
   $('st_inv_check').addEventListener('click', function () {
     var out = $('st_inv_out'); out.textContent = '';

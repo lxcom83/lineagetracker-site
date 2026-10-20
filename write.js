@@ -9,7 +9,7 @@
     selling: 'It reads as an advert. The blog cannot be used to sell.', contact_details: 'Please take out phone numbers, email or home addresses.',
     not_yours: 'Please only use photos and words that are your own.', unsafe_advice: 'Some advice in it could be unsafe.', rude: 'Please keep it friendly and respectful.',
     impersonation: 'The name used does not look like your own.', spam: 'It looks like spam.', complaint: 'It was taken down after a report.', other: 'See the note from the reviewer.' };
-  var ERR = { blog_closed: 'Writing is not open yet.', too_many_drafts: 'You have 20 posts that are not published. Delete one to start another.',
+  var ERR = { bad_date: 'That day is too far ahead. Pick a day within the next four months, or leave it empty.', blog_closed: 'Writing is not open yet.', too_many_drafts: 'You have 20 posts that are not published. Delete one to start another.',
     need_title: 'Please give the post a title (at least 3 letters).', need_body: 'Please write something first.', need_kind: 'Please choose at least one kind (Progress update, How-to and so on).',
     need_name: 'Please write the name to show, or choose your alias.', weekly_limit: 'You can send up to 3 posts for review a week. Please try again in a few days.',
     too_many_images: 'A post can have up to 12 photos.', image_in_use: 'That photo is still used in the post.', bad_image: 'That photo could not be used. Please try another.',
@@ -32,10 +32,10 @@
       var ul = el('ul', { 'class': 'wr-posts' });
       j.posts.forEach(function (p) {
         var chips = [];
-        if (p.live) chips.push(el('span', { 'class': 'chip ok', text: 'Published' }));
+        if (p.live) chips.push(el('span', { 'class': p.scheduled ? 'chip' : 'chip ok', text: p.scheduled ? 'Scheduled for ' + fmt(p.published_at) : 'Published' }));
         if (!p.live || p.status !== 'draft') chips.push(el('span', { 'class': 'chip' + (p.status === 'changes' || p.status === 'rejected' ? ' warn' : ''), text: p.live && p.status === 'draft' ? 'Draft of an update' : (p.live ? 'Update: ' : '') + STATUS[p.status] }));
         var li = el('li', {}, [el('div', { 'class': 'wr-pt' }, [el('b', { text: p.title || 'Untitled' })].concat(chips))]);
-        var sub = 'Last changed ' + fmt(p.updated_at) + (p.live ? ' · ' + p.likes + ' like' + (p.likes === 1 ? '' : 's') : '');
+        var sub = 'Last changed ' + fmt(p.updated_at) + (p.live && !p.scheduled ? ' · ' + p.likes + ' like' + (p.likes === 1 ? '' : 's') + ' · ' + (p.views || 0) + ' page load' + (p.views === 1 ? '' : 's') + (p.views7 ? ' (' + p.views7 + ' this week)' : '') : '');
         li.appendChild(el('p', { 'class': 'small muted', text: sub }));
         if (p.review_reason && (p.status === 'changes' || p.status === 'rejected')) {
           var box = el('div', { 'class': 'notice warn small' }, [el('b', { text: 'From the reviewer: ' }), document.createTextNode(REASONS[p.review_reason] || '')]);
@@ -45,10 +45,32 @@
         var acts = el('div', { 'class': 'actions tight' });
         var open = el('button', { 'class': 'btn primary', type: 'button', text: 'Open' }); open.onclick = function () { openPost(p.id); }; acts.appendChild(open);
         if (p.live && p.slug) acts.appendChild(el('a', { 'class': 'btn', href: 'post.html?p=' + encodeURIComponent(p.slug), text: 'View' }));
+        if (p.live && !p.scheduled) {
+          var rb = el('button', { 'class': 'btn', type: 'button', text: 'Who reacted' }), rbox = el('div', { 'class': 'small', hidden: 'hidden' });
+          rb.onclick = function () {
+            if (!rbox.hidden) { rbox.hidden = true; return; }
+            rbox.textContent = 'Loading…'; rbox.hidden = false;
+            A.rpc('member_blog_reactors', { p_post: p.id }).then(function (x) { showReactors(rbox, x.ok ? x.body : null); });
+          };
+          acts.appendChild(rb); li.appendChild(acts); li.appendChild(rbox); ul.appendChild(li); return;
+        }
         li.appendChild(acts); ul.appendChild(li);
       });
       $('wr_posts').appendChild(ul);
     });
+  }
+
+  // counts and the alias of each member who reacted (preset lines only; no free text exists)
+  var KIND_NAME = { like: 'Liked', helpful: 'Found it helpful', grew: 'Grew this too', photo: 'Liked the photo', thanks: 'Said thanks' };
+  var THANK_LINE = ['', 'Thanks for sharing', 'This helped me', 'I\'ll try this', 'Lovely photos'];
+  function showReactors(box, r) {
+    box.textContent = '';
+    if (!r) { box.textContent = 'Could not load this just now.'; return; }
+    box.appendChild(el('p', { 'class': 'muted', text: (r.like || 0) + ' like' + (r.like === 1 ? '' : 's') + ' · ' + (r.helpful || 0) + ' helpful · ' + (r.grew || 0) + ' grew it too · ' + (r.photo || 0) + ' photo · ' + (r.thanks || 0) + ' thanks' }));
+    if (!(r.who || []).length) { box.appendChild(el('p', { 'class': 'muted', text: 'Nobody has reacted yet.' })); return; }
+    var ul = el('ul', { 'class': 'list' });
+    r.who.forEach(function (w) { ul.appendChild(el('li', { text: w.alias + ': ' + (KIND_NAME[w.kind] || '') + (w.kind === 'thanks' && THANK_LINE[w.line] ? ' ("' + THANK_LINE[w.line] + '")' : '') })); });
+    box.appendChild(ul);
   }
 
   /* ---------- the editor ---------- */
@@ -80,14 +102,26 @@
       var st = p.live ? (p.status === 'draft' ? 'Published. Changes you save are not public until you send them for review again.' : 'Published. Your update is ' + STATUS[p.status].toLowerCase() + '.') : STATUS[p.status] + '.';
       $('wr_status').textContent = st;
       $('wr_withdraw').hidden = !p.live;
+      $('wr_when').value = p.wanted_date ? String(p.wanted_date).slice(0, 10) : ''; $('wr_when_box').hidden = $('wr_when_note').hidden = !!p.live;
       $('wr_submit').disabled = p.status === 'submitted' || !mine.open;
       if (p.status === 'submitted') $('wr_state').textContent = 'Waiting for review. You can still make changes; saving takes it out of the queue until you send it again.';
-      show('wr_edit');
+      show('wr_edit'); live();
     };
     if (!id) { go({ id: null, title: '', body: [], kinds: [], interests: [], byline_mode: 'alias', byline_name: '', status: 'draft', live: false, images: [] }); return; }
     call({ action: 'get', id: id }).then(function (j) { if (!j.ok) { $('wr_list_msg').textContent = msg(j); return; } go(j.post); });
   }
-  function markDirty() { dirty = true; $('wr_state').textContent = 'Not saved yet'; clearTimeout(saveTimer); saveTimer = setTimeout(function () { save(false); }, 4000); }
+  var liveTimer;
+  function live() {
+    clearTimeout(liveTimer);
+    liveTimer = setTimeout(function () {
+      var box = $('wr_live'); if (!box || !ed || !$('wr_live_box').offsetParent) return;
+      box.textContent = '';
+      var all = imageMap(); var extra = ed.images(); Object.keys(extra).forEach(function (k) { all[k] = extra[k]; });
+      box.appendChild(el('h1', { text: $('wr_title').value.trim() || 'Untitled' }));
+      box.appendChild(B.render(ed.get(), { image: function (id) { return all[id] || null; } }));
+    }, 250);
+  }
+  function markDirty() { live(); dirty = true; $('wr_state').textContent = 'Not saved yet'; clearTimeout(saveTimer); saveTimer = setTimeout(function () { save(false); }, 4000); }
   function payload() {
     return { action: 'save', id: post.id, title: $('wr_title').value.trim(), body: ed.get(), kinds: post.kinds || [], interests: post.interests || [],
       byline_mode: $('wr_by_name').checked ? 'name' : 'alias', byline_name: $('wr_name').value.trim(), cover: null };
@@ -142,9 +176,15 @@
       send(null);
     });
   }
+  // the day the author would like, only if it is today or later and within four months; anything else is left out
+  function wantedDay() {
+    var v = $('wr_when').value; if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return null;
+    var t = new Date(v + 'T00:00:00'), now = new Date(); now.setHours(0, 0, 0, 0);
+    return t >= now && t - now <= 119 * 86400000 ? v : null;
+  }
   function send(agreement) {
     var b = $('wr_submit'); b.disabled = true;
-    call({ action: 'submit', id: post.id, agreement: agreement }).then(function (j) {
+    call({ action: 'submit', id: post.id, agreement: agreement, wanted: wantedDay() }).then(function (j) {
       if (!j.ok) { b.disabled = false; $('wr_msg').textContent = msg(j); return; }
       if (agreement) mine.agreement_mine = agreement;
       $('wr_agree').hidden = true;
@@ -158,6 +198,15 @@
   $('wr_new').onclick = function () { openPost(null); };
   $('wr_back').onclick = function () { (dirty ? save(false) : Promise.resolve()).then(loadList); };
   $('wr_title').addEventListener('input', markDirty);
+  $('wr_paste_go').onclick = function () {
+    var t = $('wr_paste').value, msgEl = $('wr_paste_msg');
+    if (!t.trim()) { msgEl.textContent = 'Paste some text first.'; return; }
+    var blocks = B.fromText(t);
+    if (!blocks.length) { msgEl.textContent = 'Nothing could be read from that text.'; return; }
+    var r = ed.append(blocks);
+    msgEl.textContent = r.added + (r.added === 1 ? ' block added.' : ' blocks added.') + (r.dropped ? ' ' + r.dropped + ' more did not fit (a post can have 150 blocks). Start a second post for the rest.' : ' Check it below, then add your photos.');
+    if (r.added) { $('wr_paste').value = ''; }
+  };
   $('wr_save').onclick = function () { save(true); };
   $('wr_preview_btn').onclick = preview;
   $('wr_preview_close').onclick = function () { $('wr_preview').hidden = true; };

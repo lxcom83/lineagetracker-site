@@ -8,7 +8,7 @@
 if (window.top !== window.self) { try { document.documentElement.style.display = 'none'; window.top.location = window.self.location.href; } catch (e) { /* ignore */ } }
 window.AC = (function () {
   var LT = window.LT, cfg = LT.cfg, el = LT.el, KEY = 'lt_session', mem = null, inflight = null, where = '';
-  var NEXT_OK = ['account.html', 'staff.html', 'write.html', 'blog.html'];
+  var NEXT_OK = ['account.html', 'staff.html', 'write.html', 'blog.html', 'partners.html'];
   function now() { return Math.floor(Date.now() / 1000); }
   function ses() { try { return window.sessionStorage; } catch (e) { return null; } }
   function loc() { try { return window.localStorage; } catch (e) { return null; } }

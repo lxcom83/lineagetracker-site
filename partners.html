@@ -29,9 +29,10 @@
 <header class="top"><div class="wrap"><a class="brand" href="./"><img src="favicon.svg" alt="">Lineage Tracker</a><nav><a href="./">About</a><a href="plants.html">Plants</a><a href="animals.html">Animals</a><a href="https://tools.lineagetracker.org/">Tools</a><a href="blog.html">Blog</a><a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">Videos</a><a href="whatsnext.html">What's next</a><a href="get.html">Get the app</a></nav><a class="nav-open" href="https://app.lineagetracker.org/">Open the app</a></div></header>
 <main>
 <div class="wrap narrow" style="padding:40px 22px 10px">
+<p class="small"><a href="account.html">&larr; Your account</a></p>
 <h1>Make it yours</h1>
 <p class="lede">Your club's own app, free.</p>
-<p>Seed libraries, garden clubs, breed societies, schools and nurseries can offer members their own version of Lineage Tracker, with your name, logo, colours and the features that suit you. It takes a few minutes. There's nothing to install or host, and you never need to ask us.</p>
+<p>Seed libraries, garden clubs, breed societies, schools and nurseries can offer members their own version of Lineage Tracker, with your name, logo, colours and the features that suit you. It takes a few minutes, then a person reads it before it goes live. There's nothing to install or host, and you never need to ask us.</p>
 <ul class="ticks">
 <li><b>Your brand:</b> name, logo, colours and a welcome message.</li>
 <li><b>Your focus:</b> plants, animals or both, and only the features your members need.</li>
@@ -41,7 +42,15 @@
 </ul>
 </div>
 <section><div class="wrap narrow">
-<h2>Build your version</h2>
+<div id="pk_gate" class="notice" hidden><p><b>Sign in to make your version.</b> It needs a free Lineage Tracker website account (the app itself never does). We ask so that every version has an owner we can reach, and so that a version can be switched off if it is misused.</p><div class="actions"><a class="btn primary" href="signin.html?next=partners.html">Sign in</a><a class="btn" href="signup.html">Create a free account</a></div></div>
+<div id="pk_account" hidden>
+<div id="pk_closed" class="notice" hidden><b>Making new versions is not open yet.</b> Please check back soon.</div>
+<div id="pk_off" class="notice warn" hidden><b>Partner versions are paused for now.</b> Existing versions are showing plain Lineage Tracker until they are switched back on.</div>
+<div id="pk_sent" class="notice ok" hidden><b>Sent for review.</b> A person reads every new version before it goes live, usually within a few days. We will email you, and the link will appear here as soon as it is ready.</div>
+<h2>Your versions</h2>
+<div id="pk_mine"></div>
+</div>
+<h2 id="pk_title">Build your version</h2><span id="pk_buildhead" hidden></span><div id="pk_build"></div>
 <form id="pk" class="fb" novalidate>
   <div class="two"><label class="fld"><span>App name</span><input name="n" maxlength="40" placeholder="e.g. Hilltop Seed Library" required></label><label class="fld"><span>Your organisation</span><input name="o" maxlength="60" placeholder="e.g. Hilltop Seed Savers"></label></div>
   <label class="fld"><span>Logo address (optional)</span><input name="l" placeholder="https://yourwebsite.org/logo.png"></label>
@@ -70,25 +79,17 @@
 <li><b>Use your own name and logo,</b> and only variety lists you have the right to share. Don't suggest you are Lineage Tracker.</li>
 <li><b>Respect privacy.</b> Members' records stay on their own devices. Don't ask them to send you their records unless they choose to.</li>
 <li><b>You're responsible for what you add:</b> your welcome message, your variety list and any claims about your products.</li>
-<li><b>Withdrawal.</b> Lineage Tracker may withdraw a version that breaks these terms or is misleading or offensive. Members keep their records and continue with plain Lineage Tracker.</li>
+<li><b>Review, expiry and withdrawal.</b> A person at Lineage Tracker reads every version before it goes live, and links last 12 months (renew from this page). Lineage Tracker may switch off a version at any time, for example if it breaks these terms or is misleading or offensive. Members keep their records and continue with plain Lineage Tracker.</li>
 </ol>
   <label class="chk"><input type="checkbox" id="agree"> I agree to the relabelling terms on behalf of my organisation</label>
-  <div class="actions"><button class="btn primary" type="submit">Create my link</button></div>
+  <div class="actions"><button class="btn primary" type="submit" id="pk_send">Send for review</button><button class="btn" type="button" id="pk_cancel" hidden>Cancel the change</button></div>
 </form>
 <div class="notice" style="margin-top:18px"><b>Need more?</b> Your own web address, custom features, or your own branding without the Lineage Tracker credit are available under a paid licence. Email <a href="mailto:feedback@lineagetracker.org">feedback@lineagetracker.org</a>.</div>
-<div id="out" hidden>
-  <h3>Your link</h3>
-  <p>Share this with your members, on your website, in newsletters or on flyers.</p>
-  <div class="linkbox"><input id="link" readonly></div>
-  <div class="actions"><button class="btn primary" id="copy" type="button">Copy link</button><a class="btn" id="open" target="_blank" rel="noopener">Open it</a><button class="btn" id="dlqr" type="button">Download QR code</button></div>
-  <div id="qr" class="qrbox"></div>
-  <p class="small muted">Your version's ID: <b id="pid"></b>. Mention it if you contact us. To change anything, come back and make a new link; members who open the new link get the update.</p>
-</div>
 <div id="err" class="notice warn" hidden></div>
 </div></section>
 </main>
-<footer><div class="wrap"><div class="fcols"><div class="fcol"><h2>The app</h2><ul><li><a href="https://app.lineagetracker.org/">Open the app</a></li><li><a href="get.html">Get the app</a></li><li><a href="plants.html">For plants</a></li><li><a href="animals.html">For animals</a></li><li><a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">How-to videos</a></li></ul></div><div class="fcol"><h2>LT tools</h2><ul><li><a href="https://tools.lineagetracker.org/">All tools</a></li><li><a href="https://tools.lineagetracker.org/print/">LT-Print: labels and stickers</a></li><li><a href="https://tools.lineagetracker.org/planner/">LT-Planner: garden and farm</a></li></ul></div><div class="fcol"><h2>Community</h2><ul><li><a href="blog.html">Member blog</a></li><li><a href="signup.html">Stay in touch</a></li><li><a href="globe.html">Community globe (demo)</a></li><li><a href="testers.html">Help test</a></li><li><a href="feedback.html?type=bug">Report a bug</a></li><li><a href="feedback.html">Feedback and ideas</a></li></ul></div><div class="fcol"><h2>Lineage Tracker</h2><ul><li><a href="whatsnext.html">What's next</a></li><li><a href="partners.html">Make it yours (clubs)</a></li><li><a href="donate.html">Support us</a></li><li><a href="https://github.com/lxcom83/LineageTracker">GitHub</a></li><li><a href="privacy.html">Your data</a></li><li><a href="terms.html">Terms</a></li></ul></div></div><p class="fline">© 2026 Lineage Tracker. Free forever: no ads, no paid tiers, and your records stay on your own device.</p></div></footer>
-<script src="qr.js?v=17"></script>
-<script src="partners.js?v=17"></script>
+<footer><div class="wrap"><div class="fcols"><div class="fcol"><h2>The app</h2><ul><li><a href="https://app.lineagetracker.org/">Open the app</a></li><li><a href="get.html">Get the app</a></li><li><a href="plants.html">For plants</a></li><li><a href="animals.html">For animals</a></li><li><a href="examples.html">Examples to try</a></li><li><a href="https://www.youtube.com/@LineageTracker" target="_blank" rel="noopener">How-to videos</a></li></ul></div><div class="fcol"><h2>LT tools</h2><ul><li><a href="https://tools.lineagetracker.org/">All tools</a></li><li><a href="https://tools.lineagetracker.org/print/">LT-Print: labels and stickers</a></li><li><a href="https://tools.lineagetracker.org/planner/">LT-Planner: garden and farm</a></li></ul></div><div class="fcol"><h2>Community</h2><ul><li><a href="blog.html">Member blog</a></li><li><a href="signup.html">Stay in touch</a></li><li><a href="globe.html">Community globe (demo)</a></li><li><a href="testers.html">Help test</a></li><li><a href="feedback.html?type=bug">Report a bug</a></li><li><a href="feedback.html">Feedback and ideas</a></li></ul></div><div class="fcol"><h2>Lineage Tracker</h2><ul><li><a href="whatsnext.html">What's next</a></li><li><a href="partners.html">Make it yours (clubs)</a></li><li><a href="donate.html">Support us</a></li><li><a href="https://github.com/lxcom83/LineageTracker">GitHub</a></li><li><a href="privacy.html">Your data</a></li><li><a href="terms.html">Terms</a></li></ul></div></div><p class="fline">© 2026 Lineage Tracker. Free forever: no ads, no paid tiers, and your records stay on your own device.</p></div></footer>
+<script src="waitlist.js?v=1"></script><script src="acct.js?v=1"></script><script src="qr.js?v=17"></script>
+<script src="partners.js?v=18"></script>
 </body>
 </html>
