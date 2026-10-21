@@ -35,7 +35,7 @@
   var TABS = ['overview', 'members', 'blog', 'partners', 'invites', 'audit', 'settings', 'health'];
   function show(name) {
     TABS.forEach(function (n) { $('st_p_' + n).hidden = n !== name; $('st_t_' + n).setAttribute('aria-selected', n === name ? 'true' : 'false'); });
-    if (name === 'overview') { loadAttention(); loadStats(); } if (name === 'members') loadMembers(0); if (name === 'settings') loadFlags(); if (name === 'audit') loadAudit(0); if (name === 'health') loadHealth(); if (name === 'partners') loadPartners(); if (name === 'blog') loadBlog();
+    if (name === 'overview') { loadAttention(); loadSignups(); loadStats(); } if (name === 'members') loadMembers(0); if (name === 'settings') loadFlags(); if (name === 'audit') loadAudit(0); if (name === 'health') loadHealth(); if (name === 'partners') loadPartners(); if (name === 'blog') loadBlog();
   }
   // an idle tab is on its way to the sign-in page: do not start anything else (it would race to a different page)
   if (!idleOut) A.requireSignIn('staff.html').then(function (w) {
@@ -70,6 +70,28 @@
       if (!a.blog_write_on && (a.blog_live || a.blog_waiting)) item('Blog writing is switched off (members cannot send posts)', 'settings', false);
       if (!a.blog_public_on && (a.blog_live || a.blog_scheduled)) item('Blog reading is switched off (nobody can read posts)', 'settings', true);
       if (!ul.children.length) { box.appendChild(el('p', { 'class': 'muted', text: 'Nothing needs attention.' })); return; }
+      box.appendChild(ul);
+    });
+  }
+  // overview: who joined recently (alias, country and dates only; never an email address)
+  function loadSignups() {
+    var box = $('st_signups'); box.textContent = 'Loading…';
+    call('signups').then(function (j) {
+      box.textContent = ''; if (!j.ok) { box.textContent = errText(j); return; }
+      var a = j.signups || {};
+      box.appendChild(el('p', { 'class': a.signup_open ? '' : 'warn', text: a.signup_open ? 'Sign-up is open.' : 'Sign-up is closed, so nobody can join. Open it under Switches.' }));
+      var stats = el('div', { 'class': 'stats' });
+      [['Last 24 hours', a.today], ['Last 7 days', a.week], ['Last 30 days', a.month], ['All time', a.total]].forEach(function (x) {
+        stats.appendChild(el('div', { 'class': 'stat' }, [el('b', { text: String(x[1] || 0) }), el('span', { text: x[0] })]));
+      });
+      box.appendChild(stats);
+      if (a.unfinished) box.appendChild(el('p', { 'class': 'muted', text: a.unfinished + ' account' + (a.unfinished === 1 ? ' has' : 's have') + ' not confirmed the email yet (oldest ' + ago(a.unfinished_oldest) + ').' }));
+      var cs = a.countries || [];
+      if (cs.length) box.appendChild(el('p', { 'class': 'muted', text: 'Countries, last 30 days: ' + cs.map(function (c) { return c.country + ' ' + c.n; }).join(', ') }));
+      var rec = a.recent || [];
+      if (!rec.length) { box.appendChild(el('p', { 'class': 'muted', text: 'Nobody has joined yet.' })); return; }
+      var ul = el('ul', { 'class': 'list' });
+      rec.forEach(function (m) { ul.appendChild(el('li', { text: m.alias + (m.country ? ' (' + m.country + ')' : '') + ', ' + dayOf(m.created_at) + (m.status === 'pending' ? ', not confirmed yet' : m.status === 'suspended' ? ', suspended' : '') })); });
       box.appendChild(ul);
     });
   }

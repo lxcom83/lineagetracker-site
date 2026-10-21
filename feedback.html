@@ -39,11 +39,11 @@
   <input type="hidden" name="redirect" value="https://lineagetracker.org/feedback.html?sent=1">
   <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
   <label class="fld"><span>What's it about?</span><select name="type" id="type">
-    <option value="bug">Something isn't working</option><option value="idea">An idea or request</option><option value="question">A question</option><option value="android">I'd like to be an Android tester</option><option value="other">Something else</option></select></label>
+    <option value="bug">Something isn't working</option><option value="idea">An idea or request</option><option value="question">A question</option><option value="android">I'd like to be an Android tester</option><option value="report">Report a seller's page made with our tools</option><option value="other">Something else</option></select></label>
   <label class="fld"><span id="msgLabel">What happened?</span><textarea name="message" id="message" rows="5" required></textarea></label>
   <label class="fld" id="stepsBox"><span>What did you tap just before? (optional)</span><textarea name="steps" rows="3" placeholder="e.g. Opened a packet, tapped Sow a tray, then Save"></textarea></label>
   <div class="two"><label class="fld"><span>Your email (optional, if you'd like a reply)</span><input type="email" name="email" autocomplete="email"></label><label class="fld"><span>Your name (optional)</span><input name="name" autocomplete="name"></label></div>
-  <div id="appBox" hidden><label class="chk"><input type="checkbox" id="incApp" checked> Include these details from the app</label><pre id="appInfo" class="appinfo"></pre><input type="hidden" name="app_details" id="appDetails"></div>
+  <div id="appBox" hidden><label class="chk"><input type="checkbox" id="incApp" checked> Include these details</label><pre id="appInfo" class="appinfo"></pre><input type="hidden" name="app_details" id="appDetails"></div>
   <p class="small muted">Only what's on this form is sent. It goes through Web3Forms, a form service that emails it to us. Please don't include passwords or payment details. Want to send a screenshot, or prefer email? Write to <a href="mailto:feedback@lineagetracker.org">feedback@lineagetracker.org</a> instead.</p>
   <div class="actions"><button class="btn primary" type="submit" id="sendBtn">Send</button></div>
 </form>
@@ -60,10 +60,10 @@
   if(/PASTE-YOUR/.test(ACCESS_KEY)){document.getElementById('notReady').hidden=false;document.getElementById('sendBtn').disabled=true;}
   document.getElementById('accessKey').value=ACCESS_KEY;
   var type=document.getElementById('type'); if(q.get('type'))type.value=q.get('type');
-  var details=[];['v','device','mode','error'].forEach(function(k){if(q.get(k))details.push({v:'App version',device:'Device',mode:'Mode',error:'Error'}[k]+': '+q.get(k).slice(0,300));});
+  var details=[];['v','device','mode','error','page'].forEach(function(k){if(q.get(k))details.push({v:'App version',device:'Device',mode:'Mode',error:'Error',page:'Page reported'}[k]+': '+q.get(k).slice(0,300));});
   if(details.length){document.getElementById('appBox').hidden=false;document.getElementById('appInfo').textContent=details.join('\n');}
   if(q.get('error')){document.getElementById('message').value='';}
-  function upd(){var t=type.value;document.getElementById('stepsBox').hidden=t!=='bug';document.getElementById('msgLabel').textContent=t==='bug'?'What happened?':t==='android'?'Which phone do you use? (Android testers need a Google account)':'Tell us more';}
+  function upd(){var t=type.value;document.getElementById('stepsBox').hidden=t!=='bug';document.getElementById('msgLabel').textContent=t==='bug'?'What happened?':t==='android'?'Which phone do you use? (Android testers need a Google account)':t==='report'?'What is wrong with the page? (Please say what you saw. We cannot see the seller\'s orders or data.)':'Tell us more';}
   type.addEventListener('change',upd);upd();
   f.addEventListener('submit',function(e){
     e.preventDefault();
